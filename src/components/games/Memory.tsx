@@ -34,7 +34,7 @@ export default function MemoryGame() {
   const [gameWon, setGameWon] = useState(false)
   const [showNameModal, setShowNameModal] = useState(false)
 
-  const [timeRemaining, setTimeRemaining] = useState(120) // 2 minutos
+  const [timeRemaining, setTimeRemaining] = useState(60) // 1 minutos
   const [gameOver, setGameOver] = useState(false)
   const [gameStartTime, setGameStartTime] = useState<number | null>(null)
 
@@ -59,7 +59,7 @@ export default function MemoryGame() {
     setGameWon(false)
     setShowNameModal(false)
 
-    setTimeRemaining(120) // Resetear a 2 minutos
+    setTimeRemaining(60) // Resetear a 1 minutos
     setGameOver(false)
     setGameStartTime(Date.now())
   }
@@ -68,6 +68,7 @@ export default function MemoryGame() {
     initializeGame()
   }, [])
 
+  // Timer effect
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null
 
@@ -125,7 +126,7 @@ export default function MemoryGame() {
   }, [cards])
 
   const handleCardClick = (cardId: number) => {
-    if (flippedCards.length === 2) return
+    if (flippedCards.length === 2 || gameOver || timeRemaining <= 0) return
 
     const card = cards.find((c) => c.id === cardId)
     if (!card || card.isFlipped || card.isMatched) return
@@ -135,10 +136,11 @@ export default function MemoryGame() {
   }
 
   const calculateScore = () => {
-    // Base score of 1000, minus 20 points per move over 12
+    // Base score of 1000, minus 20 points per move over 12, plus 5 points per second remaining
     const baseScore = 1000
-    const penalty = Math.max(0, moves - 12) * 20
-    return Math.max(100, baseScore - penalty)
+    const movePenalty = Math.max(0, moves - 12) * 20
+    const timeBonus = timeRemaining * 5
+    return Math.max(100, baseScore - movePenalty + timeBonus)
   }
 
   const handleSaveScore = (playerName: string) => {
@@ -148,12 +150,60 @@ export default function MemoryGame() {
       playerName,
       game: "memory",
       score: finalScore,
-      details: `${moves} movimientos`,
+      details: `${moves} movimientos, ${formatTime(60 - timeRemaining)} tiempo usado`,
       timestamp: Date.now(),
     })
     setShowNameModal(false)
   }
 
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, "0")}`
+  }
+
+  const getTimerColor = () => {
+    if (timeRemaining > 40) return "text-green-400"
+    if (timeRemaining > 20) return "text-yellow-400"
+    return "text-red-400"
+  }
+
+  const getTimerAnimation = () => {
+    if (timeRemaining <= 10) return "animate-pulse"
+    return ""
+  }
+
+  // Pantalla de tiempo agotado
+  if (gameOver && timeRemaining <= 0 && !showNameModal) {
+    return (
+      <GameLayout gameTitle="Desafío de Memoria">
+        <div className="max-w-2xl mx-auto text-center">
+          <Card className="bg-white/10 backdrop-blur-sm border-white/20">
+            <CardHeader>
+              <div className="flex justify-center mb-4">
+                <div className="text-8xl">⏰</div>
+              </div>
+              <CardTitle className="text-4xl text-red-400">¡Tiempo Agotado!</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="text-6xl font-bold text-red-400">{moves}</div>
+              <div className="text-2xl text-white/90">Movimientos realizados</div>
+              <p className="text-xl text-white/80">¡No pudiste completar todas las parejas a tiempo!</p>
+              <p className="text-lg text-white/70">
+                Parejas encontradas: {cards.filter((card) => card.isMatched).length / 2} de {cardSymbols.length}
+              </p>
+              <Button onClick={initializeGame} size="lg" className="text-xl py-6 px-12 bg-red-600 hover:bg-red-700">
+                <RotateCcw className="w-6 h-6 mr-2" />
+                Intentar de Nuevo
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </GameLayout>
+    )
+  }
+
+  // Pantalla de victoria
   if (gameWon && !showNameModal) {
     return (
       <GameLayout gameTitle="Desafío de Memoria">
@@ -166,12 +216,29 @@ export default function MemoryGame() {
               <CardTitle className="text-4xl text-white">¡Felicitaciones!</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="text-6xl font-bold text-red-400">{moves} Movimientos</div>
-              <div className="text-3xl font-bold text-green-400">{calculateScore()} puntos</div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="bg-white/10 p-4 rounded-lg text-center">
+                  <div className="text-3xl font-bold text-red-400">{moves}</div>
+                  <div className="text-white/80">Movimientos</div>
+                </div>
+                <div className="bg-white/10 p-4 rounded-lg text-center">
+                  <div className="text-3xl font-bold text-blue-400">{formatTime(120 - timeRemaining)}</div>
+                  <div className="text-white/80">Tiempo Usado</div>
+                </div>
+                <div className="bg-white/10 p-4 rounded-lg text-center">
+                  <div className="text-3xl font-bold text-green-400">{calculateScore()}</div>
+                  <div className="text-white/80">Puntos</div>
+                </div>
+              </div>
               <p className="text-2xl text-white/90">
-                {moves <= 12 ? "¡Excelente Memoria! 🧠" : moves <= 20 ? "¡Buen Trabajo! 👏" : "¡Buen Esfuerzo! 💪"}
+                {moves <= 12 && timeRemaining > 60
+                  ? "¡Perfecto! Rápido y eficiente! 🏆"
+                  : moves <= 12
+                  ? "¡Excelente Memoria! 🧠"
+                  : timeRemaining > 30
+                  ? "¡Buen Tiempo! ⏱️"
+                  : "¡Buen Esfuerzo! 💪"}
               </p>
-              <p className="text-lg text-white/70">¡Tu puntuación ha sido guardada en el leaderboard!</p>
               <Button onClick={initializeGame} size="lg" className="text-xl py-6 px-12 bg-red-600 hover:bg-red-700">
                 <RotateCcw className="w-6 h-6 mr-2" />
                 Jugar de Nuevo
@@ -183,6 +250,7 @@ export default function MemoryGame() {
     )
   }
 
+  // Pantalla de juego
   return (
     <GameLayout gameTitle="Desafío de Memoria">
       <PlayerNameModal isOpen={showNameModal} onSubmit={handleSaveScore} gameTitle="Desafío de Memoria" />
@@ -192,9 +260,16 @@ export default function MemoryGame() {
           <div className="text-2xl text-white/90">
             Movimientos: <span className="text-red-400 font-bold">{moves}</span>
           </div>
-          <div className="text-2xl text-white/90">
-            Puntuación: <span className="text-green-400 font-bold">{gameWon ? calculateScore() : "---"}</span>
+
+          <div className="flex justify-center items-center space-x-8 mb-6">
+            <div className={`text-2xl text-white/90 ${getTimerAnimation()}`}>
+              ⏰ Tiempo: <span className={`font-bold text-3xl ${getTimerColor()}`}>{formatTime(timeRemaining)}</span>
+            </div>
+            <div className="text-xl text-white/90">
+              Puntuación: <span className="text-green-400 font-bold">{gameWon ? calculateScore() : "---"}</span>
+            </div>
           </div>
+
           <Button
             onClick={initializeGame}
             variant="outline"
@@ -210,19 +285,13 @@ export default function MemoryGame() {
           {cards.map((card) => (
             <Card
               key={card.id}
-              // className={`aspect-square cursor-pointer transition-all duration-300 ${
-              //   card.isFlipped || card.isMatched
-              //     ? "bg-red-600 border-red-500"
-              //     : "bg-white/10 border-white/20 hover:bg-white/20"
-              // }`}
               className={`aspect-square cursor-pointer transition-all duration-300 ${
                 card.isMatched
-                  ? "bg-green-800 border-green-700" // ✅ verde si matchea
+                  ? "bg-green-800 border-green-700"
                   : card.isFlipped
-                  ? `bg-${brandingData.color}-800 border-${brandingData.color}-700`   // 
+                  ? `bg-${brandingData.color}-800 border-${brandingData.color}-700`
                   : "bg-white/40 border-white/20 hover:bg-white/20"
               }`}
-              
               onClick={() => handleCardClick(card.id)}
             >
               <CardContent className="flex items-center justify-center h-full p-0">
@@ -242,21 +311,13 @@ export default function MemoryGame() {
                   </div>
                 </div>
               </CardContent>
-              {/* <CardContent className="flex items-center justify-center h-full p-0">
-                <div className="text-4xl">{card.isFlipped || card.isMatched ? (
-                  <img src={`${card.symbol}`} alt="card" className="h-28 w-28 object-contain" />
-                ): (
-                  <img src={`${brandingData.logoUrl}`} alt="❓" />
-                )
-                  }</div>
-              </CardContent> */}
             </Card>
           ))}
         </div>
 
         <div className="text-center mt-8">
           <p className="text-xl text-white/80">¡Encuentra todas las parejas para ganar!</p>
-          <p className="text-lg text-white/60 mt-2">Menos movimientos = más puntos</p>
+          <p className="text-lg text-white/60 mt-2">Menos movimientos y tiempo = más puntos</p>
         </div>
       </div>
     </GameLayout>
