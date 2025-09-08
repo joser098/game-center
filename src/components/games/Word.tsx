@@ -5,12 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import GameLayout from "@/components/game-layout"
 import { Trophy, Clock, Zap } from "lucide-react"
-
-const wordCategories = {
-  Bebidas: ["COCACOLA", "REFRESCO", "BURBUJAS", "FELICIDAD", "COMPARTIR"],
-  Animales: ["ELEFANTE", "JIRAFA", "PINGUINO", "DELFIN", "MARIPOSA"],
-  Tecnología: ["COMPUTADORA", "INTERNET", "SOFTWARE", "TECLADO", "MONITOR"],
-}
+import brandingData from "@/utils/conts"
 
 export default function WordGame() {
   const [currentCategory, setCurrentCategory] = useState("Bebidas")
@@ -25,9 +20,9 @@ export default function WordGame() {
   const maxWrongGuesses = 6
 
   const initializeGame = () => {
-    const categories = Object.keys(wordCategories)
+    const categories = Object.keys(brandingData.wordCategories)
     const randomCategory = categories[Math.floor(Math.random() * categories.length)]
-    const words = wordCategories[randomCategory as keyof typeof wordCategories]
+    const words = brandingData.wordCategories[randomCategory as keyof typeof brandingData.wordCategories]
     const randomWord = words[Math.floor(Math.random() * words.length)]
 
     setCurrentCategory(randomCategory)
@@ -98,7 +93,7 @@ export default function WordGame() {
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div className="text-2xl text-white/90">
-            Puntuación: <span className="text-red-400 font-bold">{score}</span>
+            Puntuación: <span className={`text-${brandingData.color}-400 font-bold`}>{score}</span>
           </div>
           <div className="text-2xl text-white/90">
             Categoría: <span className="text-green-400 font-bold">{currentCategory}</span>
@@ -109,14 +104,14 @@ export default function WordGame() {
           <CardHeader>
             <CardTitle className="text-center">
               <div className="flex items-center justify-center space-x-4 mb-4">
-                <Clock className="w-8 h-8 text-red-400" />
+                <Clock className={`w-8 h-8 text-${brandingData.color}-400`} />
                 <span className="text-3xl text-white">Adivina la Palabra</span>
                 <Zap className="w-8 h-8 text-yellow-400" />
               </div>
             </CardTitle>
           </CardHeader>
           <CardContent className="text-center space-y-6">
-            <div className="text-6xl font-mono font-bold text-red-400 tracking-wider">{displayWord()}</div>
+            <div className={`text-6xl font-mono font-bold text-${brandingData.color}-400 tracking-wider`}>{displayWord()}</div>
 
             <div className="text-2xl text-white/90">
               Errores: {wrongGuesses} / {maxWrongGuesses}
@@ -136,11 +131,11 @@ export default function WordGame() {
 
             {gameLost && (
               <div className="space-y-4">
-                <p className="text-3xl text-red-400 font-bold">¡Juego Terminado!</p>
+                <p className={`text-3xl text-${brandingData.color}-400 font-bold`}>¡Juego Terminado!</p>
                 <p className="text-2xl text-white/90">
-                  La palabra era: <span className="text-red-400 font-bold">{currentWord}</span>
+                  La palabra era: <span className={`text-${brandingData.color}-400 font-bold`}>{currentWord}</span>
                 </p>
-                <Button onClick={nextWord} size="lg" className="text-xl py-6 px-12 bg-red-600 hover:bg-red-700">
+                <Button onClick={nextWord} size="lg" className={`text-xl py-6 px-12 bg-${brandingData.color}-600 hover:bg-${brandingData.color}-700`}>
                   Intentar de Nuevo
                 </Button>
               </div>
@@ -150,7 +145,7 @@ export default function WordGame() {
 
         {!gameWon && !gameLost && (
           <>
-            <Card className="bg-white/10 backdrop-blur-sm border-white/20 mb-6">
+            {/*<Card className="bg-white/10 backdrop-blur-sm border-white/20 mb-6">
               <CardContent className="p-6">
                 <form onSubmit={handleInputSubmit} className="flex space-x-4">
                   <Input
@@ -160,12 +155,12 @@ export default function WordGame() {
                     maxLength={1}
                     className="text-2xl text-center bg-white/10 border-white/20 text-white placeholder:text-white/50"
                   />
-                  <Button type="submit" size="lg" className="px-8 bg-red-600 hover:bg-red-700">
+                  <Button type="submit" size="lg" className={`px-8 bg-${brandingData.color}-600 hover:bg-${brandingData.color}-700`}>
                     Adivinar
                   </Button>
                 </form>
               </CardContent>
-            </Card>
+            </Card>*/}
 
             <div className="grid grid-cols-6 md:grid-cols-13 gap-2">
               {alphabet.map((letter) => (
@@ -174,11 +169,11 @@ export default function WordGame() {
                   onClick={() => handleGuess(letter)}
                   disabled={guessedLetters.includes(letter)}
                   variant={guessedLetters.includes(letter) ? "secondary" : "outline"}
-                  className={`aspect-square text-xl font-bold ${
+                  className={`aspect-square text-xl font-bold h-16 ${
                     guessedLetters.includes(letter)
                       ? currentWord.includes(letter)
                         ? "bg-green-600 text-white"
-                        : "bg-red-600 text-white"
+                        : `bg-${brandingData.color}-600 text-white`
                       : "bg-white/10 border-white/20 text-white hover:bg-white/20"
                   }`}
                 >

@@ -1,32 +1,14 @@
+"use client"
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import GameLayout from "@/components/game-layout"
+import PlayerNameModal from "@/components/player-name-modal"
 import { CheckCircle, XCircle, Trophy } from "lucide-react"
-
-const triviaQuestions = [
-  {
-    question: "¿En qué año se fundó Coca-Cola?",
-    options: ["1885", "1886", "1887", "1888"],
-    correct: 1,
-  },
-  {
-    question: "¿Cuál es la capital de Francia?",
-    options: ["Londres", "Berlín", "París", "Madrid"],
-    correct: 2,
-  },
-  {
-    question: "¿Qué planeta es conocido como el Planeta Rojo?",
-    options: ["Venus", "Marte", "Júpiter", "Saturno"],
-    correct: 1,
-  },
-  {
-    question: "¿Cuánto es 2 + 2?",
-    options: ["3", "4", "5", "6"],
-    correct: 1,
-  },
-]
+import { saveScore, generatePlayerId } from "@/lib/leaderboard"
+import BData from "@/utils/conts"
 
 export default function TriviaGame() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -34,24 +16,39 @@ export default function TriviaGame() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [showResult, setShowResult] = useState(false)
   const [gameFinished, setGameFinished] = useState(false)
+  const [showNameModal, setShowNameModal] = useState(false)
 
   const handleAnswerSelect = (answerIndex: number) => {
     setSelectedAnswer(answerIndex)
     setShowResult(true)
 
-    if (answerIndex === triviaQuestions[currentQuestion].correct) {
+    if (answerIndex === BData.triviaQuestions[currentQuestion].correct) {
       setScore(score + 1)
     }
 
     setTimeout(() => {
-      if (currentQuestion < triviaQuestions.length - 1) {
+      if (currentQuestion < BData.triviaQuestions.length - 1) {
         setCurrentQuestion(currentQuestion + 1)
         setSelectedAnswer(null)
         setShowResult(false)
       } else {
         setGameFinished(true)
+        setShowNameModal(true)
       }
     }, 2000)
+  }
+
+  const handleSaveScore = (playerName: string) => {
+    const finalScore = score * 100 // 100 points per correct answer
+    saveScore({
+      id: generatePlayerId(),
+      playerName,
+      game: "trivia",
+      score: finalScore,
+      details: `${score}/${BData.triviaQuestions.length} correctas`,
+      timestamp: Date.now(),
+    })
+    setShowNameModal(false)
   }
 
   const resetGame = () => {
@@ -60,9 +57,10 @@ export default function TriviaGame() {
     setSelectedAnswer(null)
     setShowResult(false)
     setGameFinished(false)
+    setShowNameModal(false)
   }
 
-  if (gameFinished) {
+  if (gameFinished && !showNameModal) {
     return (
       <GameLayout gameTitle="Trivia Challenge">
         <div className="max-w-2xl mx-auto text-center">
@@ -75,15 +73,17 @@ export default function TriviaGame() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="text-6xl font-bold text-red-400">
-                {score}/{triviaQuestions.length}
+                {score}/{BData.triviaQuestions.length}
               </div>
+              <div className="text-3xl font-bold text-green-400">{score * 100} puntos</div>
               <p className="text-2xl text-white/90">
-                {score === triviaQuestions.length
+                {score === BData.triviaQuestions.length
                   ? "¡Puntuación Perfecta! 🎉"
-                  : score >= triviaQuestions.length / 2
+                  : score >= BData.triviaQuestions.length / 2
                     ? "¡Excelente Trabajo! 👏"
                     : "¡Sigue Practicando! 💪"}
               </p>
+              <p className="text-lg text-white/70">¡Tu puntuación ha sido guardada en el leaderboard!</p>
               <Button onClick={resetGame} size="lg" className="text-xl py-6 px-12 bg-red-600 hover:bg-red-700">
                 Jugar de Nuevo
               </Button>
@@ -96,26 +96,28 @@ export default function TriviaGame() {
 
   return (
     <GameLayout gameTitle="Trivia Challenge">
+      <PlayerNameModal isOpen={showNameModal} onSubmit={handleSaveScore} gameTitle="Trivia Challenge" />
+
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <span className="text-2xl text-white/90">
-              Pregunta {currentQuestion + 1} de {triviaQuestions.length}
+              Pregunta {currentQuestion + 1} de {BData.triviaQuestions.length}
             </span>
-            <span className="text-2xl text-red-400 font-bold">Puntuación: {score}</span>
+            <span className="text-2xl text-red-400 font-bold">Puntuación: {score * 100}</span>
           </div>
-          <Progress value={(currentQuestion / triviaQuestions.length) * 100} className="h-3" />
+          <Progress value={(currentQuestion / BData.triviaQuestions.length) * 100} className="h-3" />
         </div>
 
         <Card className="bg-white/10 backdrop-blur-sm border-white/20">
           <CardHeader>
             <CardTitle className="text-3xl text-white text-center">
-              {triviaQuestions[currentQuestion].question}
+              {BData.triviaQuestions[currentQuestion].question}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {triviaQuestions[currentQuestion].options.map((option, index) => (
+              {BData.triviaQuestions[currentQuestion].options.map((option, index) => (
                 <Button
                   key={index}
                   onClick={() => handleAnswerSelect(index)}
@@ -123,7 +125,7 @@ export default function TriviaGame() {
                   variant="outline"
                   className={`p-6 text-xl h-auto text-left justify-start ${
                     showResult
-                      ? index === triviaQuestions[currentQuestion].correct
+                      ? index === BData.triviaQuestions[currentQuestion].correct
                         ? "bg-green-600 border-green-500 text-white"
                         : index === selectedAnswer
                           ? "bg-red-600 border-red-500 text-white"
@@ -132,10 +134,10 @@ export default function TriviaGame() {
                   }`}
                 >
                   <div className="flex items-center space-x-3">
-                    {showResult && index === triviaQuestions[currentQuestion].correct && (
+                    {showResult && index === BData.triviaQuestions[currentQuestion].correct && (
                       <CheckCircle className="w-6 h-6 text-green-400" />
                     )}
-                    {showResult && index === selectedAnswer && index !== triviaQuestions[currentQuestion].correct && (
+                    {showResult && index === selectedAnswer && index !== BData.triviaQuestions[currentQuestion].correct && (
                       <XCircle className="w-6 h-6 text-red-400" />
                     )}
                     <span>{option}</span>
