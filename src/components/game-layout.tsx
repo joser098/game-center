@@ -2,6 +2,7 @@ import type React from "react"
 import { Button } from "@/components/ui/button"
 import { Home, ArrowLeft } from "lucide-react"
 import brandingData from "@/utils/conts";
+import Banner from "@/components/Banner.tsx";
 
 interface GameLayoutProps {
   children: React.ReactNode
@@ -10,7 +11,7 @@ interface GameLayoutProps {
 
 export default function GameLayout({ children, gameTitle }: GameLayoutProps) {
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-red-900`}>
+    <div className={`flex flex-col min-h-screen bg-gradient-to-br from-${brandingData.color}-900 via-${brandingData.color}-800 to-${brandingData.color}-900`}>
       {/* Game Header */}
       <header className="border-b border-white/20 bg-black/20 backdrop-blur-sm">
         <div className="container mx-auto px-6 py-4">
@@ -56,17 +57,21 @@ export default function GameLayout({ children, gameTitle }: GameLayoutProps) {
       </header>
 
       {/* Game Content */}
-      <main className="container mx-auto px-6 py-8">{children}</main>
+      <main className="container h-full m-auto px-1 py-6">
+        {children}
+      </main>
+
 
       {/* Footer */}
       <footer className="border-t border-white/20 bg-black/20 backdrop-blur-sm mt-auto">
+        {/* ADS BANNER */}
+        <Banner/>
         <div className="container mx-auto px-6 py-4 text-center">
           <p className="text-white/80">
-            © 2024{" "}
+            Powered by © {" "}
             <span style={{ color: brandingData.brandColor }} className="font-bold">
-              {brandingData.companyName}
-            </span>{" "}
-            - {brandingData.motive}
+              Nuevos eventos
+            </span>
           </p>
         </div>
       </footer>
