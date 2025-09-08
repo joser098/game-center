@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Gamepad2, Users, Trophy, Zap } from "lucide-react"
+import { Gamepad2, Users, Trophy, Zap, Crown, Brain, Gift } from "lucide-react"
 import brandingData from "@/utils/conts";
 
 const games = [
@@ -28,6 +28,46 @@ const games = [
     players: "2-6 jugadores",
     duration: "20-40 min",
   },
+  {
+    id: "reaction-time",
+    name: "Tiempo de Reacción",
+    description: "¡Compete con tus amigos y gana recompensas!",
+    icon: Trophy,
+    players: "2-6 jugadores",
+    duration: "15-30 min",
+  },
+  {
+    id: "simon-says",
+    name: "Simón Dice",
+    description: "Memoriza y repite la secuencia de colores que Simón te muestre",
+    icon: Brain,
+    players: "2-6 jugadores",
+    duration: "20-40 min",
+  },
+  {
+    id: "pacman",
+    name: "Pac-Man",
+    description: "El clásico juego de comecocos",
+    icon: Brain,
+    players: "2-6 jugadores",
+    duration: "20-40 min",
+  },
+  {
+    id: "tetris",
+    name: "Tetris",
+    description: "Juega contra el tiempo y gana puntos",
+    icon: Brain,
+    players: "2-6 jugadores",
+    duration: "20-40 min",
+  },
+  {
+    id: "gift-wheel",
+    name: "Rueda de Regalos",
+    description: "¡Gana premios y gana puntos!",
+    icon: Gift,
+    players: "2-6 jugadores",
+    duration: "20-40 min"
+  }
 ]
 
 export default function HomePage() {
@@ -36,7 +76,7 @@ export default function HomePage() {
       {/* Header with Branding */}
       <header className="relative overflow-hidden">
         <div className="absolute inset-0 opacity-10" style={{ backgroundColor: brandingData.brandColor }} />
-        <div className="relative container mx-auto px-8 py-12">
+        <div className="relative container mx-auto px-8 pt-12 pb-6">
           <div className="flex flex-col items-center text-center space-y-6">
             <div className="relative">
               <img
@@ -64,14 +104,28 @@ export default function HomePage() {
         </div>
       </header>
 
+      {/* Leaderboard Button */}
+      <div className="container mx-auto px-8 py-8">
+        <div className="text-center">
+          <a href="/leaderboard">
+            <Button
+              size="lg"
+              className="cursor-pointer text-2xl py-6 px-12 bg-yellow-600 hover:bg-yellow-700 text-white font-bold shadow-2xl border-2 border-yellow-400"
+            >
+              <Crown className="w-8 h-8 mr-3" />Tabla de Puntuaciones
+            </Button>
+          </a>
+        </div>
+      </div>
+
       {/* Games Section */}
-      <main className="container mx-auto px-8 py-16">
-        <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-white mb-6 drop-shadow-lg">Elige tu Juego</h2>
-          <p className="text-2xl text-white/90">¡Selecciona un juego y comienza la diversión!</p>
+      <main className="container mx-auto px-8 py-4">
+        <div className="text-center pt-4 pb-8">
+          <h2 className="text-2xl font-bold text-white drop-shadow-lg">¡Selecciona un juego y comienza la diversión!</h2>
+          {/* <p className="text-xl text-white/90">¡Selecciona un juego y comienza la diversión!</p> */}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mx-auto">
           {games.map((game) => {
             const IconComponent = game.icon
             return (
@@ -79,21 +133,20 @@ export default function HomePage() {
                 key={game.id}
                 className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:scale-105 shadow-2xl"
               >
-                <CardHeader className="text-center pb-4">
+                <CardHeader className="text-center pb-1">
                   <div className="flex justify-center mb-4">
                     <div
                       className="p-6 rounded-full shadow-lg"
                       style={{ backgroundColor: `${brandingData.brandColor}40` }}
                     >
-                      <IconComponent className="w-12 h-12" style={{ color: brandingData.brandColor }} />
+                      <IconComponent className="w-12 h-12" style={{ color: '#fff' }} />
                     </div>
                   </div>
-                  <CardTitle className="text-3xl text-white drop-shadow-md">{game.name}</CardTitle>
+                  <CardTitle className="text-2xl text-white drop-shadow-md">{game.name}</CardTitle>
                 </CardHeader>
-                <CardContent className="text-center space-y-6">
-                  <p className="text-xl text-white/90">{game.description}</p>
-
-                  <div className="space-y-2 text-white/80">
+                <CardContent className="text-center space-y-2">
+                  <p className="text-lg text-white/90">{game.description}</p>
+                  <div className="flex justify-evenly space-y-2 text-white/80">
                     <p className="text-lg">👥 {game.players}</p>
                     <p className="text-lg">⏱️ {game.duration}</p>
                   </div>
@@ -114,28 +167,15 @@ export default function HomePage() {
           })}
         </div>
 
-        {/* Coca-Cola promotional section */}
-        <div className="text-center mt-20 pt-12 border-t border-white/20">
+        {/* PROMOCIONAL MARCA SOLO HOME */}
+        {/* <div className="text-center mt-20 pt-12 border-t border-white/20">
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 max-w-4xl mx-auto">
             <h3 className="text-4xl font-bold text-white mb-4">🥤 Momentos Refrescantes</h3>
             <p className="text-2xl text-white/90">
               Disfruta de estos juegos mientras compartes momentos únicos con tu equipo
             </p>
           </div>
-        </div>
-
-        {/* Footer Branding */}
-        <div className="text-center mt-20 pt-12 border-t border-white/20">
-          <p className="text-2xl text-white/80">
-            Powered by{" "}
-            <span style={{ color: brandingData.brandColor }} className="font-bold drop-shadow-md">
-              {brandingData.companyName}
-            </span>
-            <span className="font-bold drop-shadow-md">
-              {" "} & Nuevos eventos
-            </span>
-          </p>
-        </div>
+        </div> */}
       </main>
     </div>
   )
