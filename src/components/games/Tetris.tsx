@@ -7,6 +7,7 @@ import GameLayout from "@/components/game-layout"
 import PlayerNameModal from "@/components/player-name-modal"
 import { Trophy, Play, RotateCcw, Pause, ArrowDown, ArrowLeft, ArrowRight, RotateCw } from "lucide-react"
 import { saveScore, generatePlayerId } from "@/lib/leaderboard"
+import brandingData from "@/utils/conts"
 
 const BOARD_WIDTH = 10
 const BOARD_HEIGHT = 20
@@ -434,7 +435,7 @@ export default function TetrisGame() {
                 <p>⏸️ Presiona 'P' para pausar</p>
                 <p className="text-green-400 font-bold">💰 10 puntos por pieza + 100 × líneas × nivel</p>
               </div>
-              <Button onClick={startGame} size="lg" className="text-2xl py-8 px-12 bg-red-600 hover:bg-red-700">
+              <Button onClick={startGame} size="lg" className={`text-2xl py-8 px-12 bg-${brandingData.color}-600 hover:bg-${brandingData.color}-700`}>
                 <Play className="w-8 h-8 mr-3" />
                 ¡Comenzar Juego!
               </Button>

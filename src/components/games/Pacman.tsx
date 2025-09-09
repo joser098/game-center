@@ -5,6 +5,7 @@ import GameLayout from "@/components/game-layout"
 import PlayerNameModal from "@/components/player-name-modal"
 import { Trophy, Play, RotateCcw, Pause, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from "lucide-react"
 import { saveScore, generatePlayerId } from "@/lib/leaderboard"
+import brandingData from "@/utils/conts"
 
 const BOARD_WIDTH = 19
 const BOARD_HEIGHT = 21
@@ -429,7 +430,7 @@ export default function PacmanGame() {
                 <p>⏸️ Presiona 'P' para pausar</p>
                 <p className="text-green-400 font-bold">💰 10 puntos por punto, 50 por píldora, 200 por fantasma</p>
               </div>
-              <Button onClick={startGame} size="lg" className="text-2xl py-8 px-12 bg-red-600 hover:bg-red-700">
+              <Button onClick={startGame} size="lg" className={`text-2xl py-8 px-12 bg-${brandingData.color}-600 hover:bg-${brandingData.color}-700`}>
                 <Play className="w-8 h-8 mr-3" />
                 ¡Comenzar Juego!
               </Button>

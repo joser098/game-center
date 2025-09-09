@@ -186,13 +186,13 @@ export default function MemoryGame() {
               <CardTitle className="text-4xl text-red-400">¡Tiempo Agotado!</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="text-6xl font-bold text-red-400">{moves}</div>
+              <div className={`text-6xl font-bold text-${brandingData.color}-400`}>{moves}</div>
               <div className="text-2xl text-white/90">Movimientos realizados</div>
               <p className="text-xl text-white/80">¡No pudiste completar todas las parejas a tiempo!</p>
               <p className="text-lg text-white/70">
                 Parejas encontradas: {cards.filter((card) => card.isMatched).length / 2} de {cardSymbols.length}
               </p>
-              <Button onClick={initializeGame} size="lg" className="text-xl py-6 px-12 bg-red-600 hover:bg-red-700">
+              <Button onClick={initializeGame} size="lg" className={`text-xl py-6 px-12 bg-${brandingData.color}-600 hover:bg-${brandingData.color}-700`}>
                 <RotateCcw className="w-6 h-6 mr-2" />
                 Intentar de Nuevo
               </Button>
@@ -218,7 +218,7 @@ export default function MemoryGame() {
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div className="bg-white/10 p-4 rounded-lg text-center">
-                  <div className="text-3xl font-bold text-red-400">{moves}</div>
+                  <div className={`text-3xl font-bold text-${brandingData.color}-400`}>{moves}</div>
                   <div className="text-white/80">Movimientos</div>
                 </div>
                 <div className="bg-white/10 p-4 rounded-lg text-center">
@@ -258,7 +258,7 @@ export default function MemoryGame() {
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div className="text-2xl text-white/90">
-            Movimientos: <span className="text-red-400 font-bold">{moves}</span>
+            Movimientos: <span className={`text-${brandingData.color}-400 font-bold`}>{moves}</span>
           </div>
 
           <div className="flex justify-center items-center space-x-8 mb-6">

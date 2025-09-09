@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import GameLayout from "@/components/game-layout"
 import { Trophy, Play, RotateCcw, Zap, Clock } from "lucide-react"
+import brandingData from "@/utils/conts"
 
 export default function ReactionTimeGame() {
   const [gameState, setGameState] = useState<"waiting" | "ready" | "go" | "clicked" | "tooEarly">("waiting")
@@ -118,7 +119,7 @@ export default function ReactionTimeGame() {
               )}
 
               <div className="flex gap-4 justify-center">
-                <Button onClick={startGame} size="lg" className="text-2xl py-8 px-12 bg-red-600 hover:bg-red-700">
+                <Button onClick={startGame} size="lg" className={`text-2xl py-8 px-12 bg-${brandingData.color}-600 hover:bg-${brandingData.color}-700`}>
                   <Play className="w-8 h-8 mr-3" />
                   ¡Comenzar!
                 </Button>

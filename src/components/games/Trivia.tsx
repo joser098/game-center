@@ -9,6 +9,7 @@ import PlayerNameModal from "@/components/player-name-modal"
 import { CheckCircle, XCircle, Trophy } from "lucide-react"
 import { saveScore, generatePlayerId } from "@/lib/leaderboard"
 import BData from "@/utils/conts"
+import brandingData from "@/utils/conts"
 
 export default function TriviaGame() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -104,7 +105,7 @@ export default function TriviaGame() {
             <span className="text-2xl text-white/90">
               Pregunta {currentQuestion + 1} de {BData.triviaQuestions.length}
             </span>
-            <span className="text-2xl text-red-400 font-bold">Puntuación: {score * 100}</span>
+            <span className={`text-2xl text-${brandingData.color}-400 font-bold}`}>Puntuación: {score * 100}</span>
           </div>
           <Progress value={(currentQuestion / BData.triviaQuestions.length) * 100} className="h-3" />
         </div>
