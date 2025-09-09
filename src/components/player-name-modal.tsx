@@ -56,7 +56,7 @@ export default function PlayerNameModal({ isOpen, onSubmit, gameTitle }: PlayerN
               <Button
                 type="submit"
                 disabled={!playerName.trim()}
-                className="w-full text-xl py-6 bg-red-600 hover:bg-red-700 disabled:opacity-50"
+                className={`w-full text-xl py-6 bg-white/20 hover:bg-white/60 disabled:opacity-50`}
               >
                 <Trophy className="w-6 h-6 mr-2" />
                 Guardar Puntuación
