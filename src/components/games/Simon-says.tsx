@@ -5,13 +5,14 @@ import GameLayout from "@/components/game-layout"
 import PlayerNameModal from "@/components/player-name-modal"
 import { Trophy, Play, RotateCcw } from "lucide-react"
 import { saveScore, generatePlayerId } from "@/lib/leaderboard"
+import brandingData from "@/utils/conts"
 
 const colors = [
-  { id: 0, name: "Rojo", color: "#E60012", sound: "Do" },
-  { id: 1, name: "Azul", color: "#0066CC", sound: "Re" },
-  { id: 2, name: "Verde", color: "#00AA00", sound: "Mi" },
-  { id: 3, name: "Amarillo", color: "#FFD700", sound: "Fa" },
-]
+  { id: 0, name: "Rojo", color: "#E60012", sound: "Do", freq: 261.6 },   // C4
+  { id: 1, name: "Azul", color: "#0066CC", sound: "Re", freq: 329.6 },   // E4
+  { id: 2, name: "Verde", color: "#00AA00", sound: "Mi", freq: 392.0 },  // G4
+  { id: 3, name: "Amarillo", color: "#FFD700", sound: "Fa", freq: 523.2 } // C5
+];
 
 export default function SimonSaysGame() {
   const [sequence, setSequence] = useState<number[]>([])
@@ -28,6 +29,7 @@ export default function SimonSaysGame() {
     for (let i = 0; i < sequence.length; i++) {
       await new Promise((resolve) => setTimeout(resolve, 600))
       setActiveColor(sequence[i])
+      playTone(colors[sequence[i]].freq)
       await new Promise((resolve) => setTimeout(resolve, 400))
       setActiveColor(null)
     }
@@ -60,6 +62,7 @@ export default function SimonSaysGame() {
 
     const newPlayerSequence = [...playerSequence, colorId]
     setPlayerSequence(newPlayerSequence)
+    playTone(colors[colorId].freq);
 
     // Check if the player's move is correct
     if (newPlayerSequence[newPlayerSequence.length - 1] !== sequence[newPlayerSequence.length - 1]) {
@@ -104,6 +107,25 @@ export default function SimonSaysGame() {
     })
     setShowNameModal(false)
   }
+
+  // función para reproducir tono según color
+  function playTone(frequency: number, duration = 400) {
+    const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    oscillator.type = "sine"; // puedes probar "square" o "triangle"
+    oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+
+    oscillator.start();
+    gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime); // volumen
+
+    oscillator.stop(audioCtx.currentTime + duration / 1000);
+  }
+
 
   if (gameOver && !showNameModal) {
     return (
@@ -168,7 +190,7 @@ export default function SimonSaysGame() {
                 <p>🏆 ¡Consigue la puntuación más alta!</p>
                 <p className="text-green-400 font-bold">💰 50 puntos por secuencia completada</p>
               </div>
-              <Button onClick={startGame} size="lg" className="text-2xl py-8 px-12 bg-red-600 hover:bg-red-700">
+              <Button onClick={startGame} size="lg" className={`text-2xl py-8 px-12 bg-${brandingData.color}-600 hover:bg-${brandingData.color}-700`}>
                 <Play className="w-8 h-8 mr-3" />
                 ¡Comenzar Juego!
               </Button>
@@ -202,26 +224,42 @@ export default function SimonSaysGame() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-6 max-w-2xl mx-auto">
-          {colors.map((color) => (
-            <Button
-              key={color.id}
-              onClick={() => handleColorClick(color.id)}
-              disabled={!isPlayerTurn}
-              className={`aspect-square mx-auto text-2xl w-44 h-40 font-bold border-4 border-white/30 transition-all duration-200 ${
-                activeColor === color.id ? "scale-110 brightness-150" : ""
-              } ${!isPlayerTurn ? "cursor-not-allowed opacity-70" : "hover:scale-105"}`}
-              style={{
-                backgroundColor: color.color,
-                color: color.id === 3 ? "#000" : "#FFF",
-              }}
-            >
-              <div className="text-center">
-                <div className="text-3xl mb-2">{color.sound}</div>
-                <div className="text-lg">{color.name}</div>
-              </div>
-            </Button>
-          ))}
+        <div className="relative w-[420px] h-[420px] mx-auto rounded-full shadow-[inset_0_8px_20px_rgba(255,255,255,0.3),inset_0_-8px_20px_rgba(0,0,0,0.6),0_12px_25px_rgba(0,0,0,0.8)] bg-black">
+          {colors.map((color) => {
+            let position = "";
+            let rounded = "";
+
+            if (color.id === 0) {
+              position = "top-0 left-0";
+              rounded = "rounded-tl-full";
+            }
+            if (color.id === 1) {
+              position = "top-0 right-0";
+              rounded = "rounded-tr-full";
+            }
+            if (color.id === 2) {
+              position = "bottom-0 left-0";
+              rounded = "rounded-bl-full";
+            }
+            if (color.id === 3) {
+              position = "bottom-0 right-0";
+              rounded = "rounded-br-full";
+            }
+
+            return (
+              <button
+                key={color.id}
+                onClick={() => handleColorClick(color.id)}
+                disabled={!isPlayerTurn}
+                className={`absolute w-1/2 h-1/2 border-2 border-black/60 transition-all duration-200 hover:brightness-150 cursor-pointer ${rounded} ${position}
+                  ${activeColor === color.id ? "brightness-150 scale-105 z-10 shadow-[0_0_25px_rgba(255,255,255,0.9)]" : ""}
+                  ${!isPlayerTurn ? "cursor-not-allowed opacity-70" : "hover:brightness-110"}`}
+                style={{
+                  background: `radial-gradient(circle at 30% 30%, ${color.color}, ${color.color}aa)`,
+                }}
+              />
+            );
+          })}
         </div>
 
         <div className="text-center mt-8">
