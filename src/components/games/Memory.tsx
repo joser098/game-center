@@ -177,23 +177,23 @@ export default function MemoryGame() {
   if (gameOver && timeRemaining <= 0 && !showNameModal) {
     return (
       <GameLayout gameTitle="Desafío de Memoria">
-        <div className="max-w-2xl mx-auto text-center">
+        <div className="mx-auto text-center">
           <Card className="bg-white/10 backdrop-blur-sm border-white/20">
             <CardHeader>
               <div className="flex justify-center mb-4">
                 <div className="text-8xl">⏰</div>
               </div>
-              <CardTitle className="text-4xl text-red-400">¡Tiempo Agotado!</CardTitle>
+              <CardTitle className="text-8xl text-red-400">¡Tiempo Agotado!</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className={`text-6xl font-bold text-${brandingData.color}-400`}>{moves}</div>
-              <div className="text-2xl text-white/90">Movimientos realizados</div>
-              <p className="text-xl text-white/80">¡No pudiste completar todas las parejas a tiempo!</p>
-              <p className="text-lg text-white/70">
+              <div className={`text-8xl font-bold text-${brandingData.color}-400`}>{moves}</div>
+              <div className="text-6xl text-white/90">Movimientos realizados</div>
+              <p className="text-4xl text-white/80">¡No pudiste completar todas las parejas a tiempo!</p>
+              <p className="text-4xl text-white/70">
                 Parejas encontradas: {cards.filter((card) => card.isMatched).length / 2} de {cardSymbols.length}
               </p>
-              <Button onClick={initializeGame} size="lg" className={`text-xl py-6 px-12 bg-${brandingData.color}-600 hover:bg-${brandingData.color}-700`}>
-                <RotateCcw className="w-6 h-6 mr-2" />
+              <Button onClick={initializeGame} size="lg" className={`text-5xl py-6 px-12 bg-${brandingData.color}-600 hover:bg-${brandingData.color}-700`}>
+                <RotateCcw className="w-10 h-10 mr-2" />
                 Intentar de Nuevo
               </Button>
             </CardContent>
@@ -255,17 +255,16 @@ export default function MemoryGame() {
     <GameLayout gameTitle="Desafío de Memoria">
       <PlayerNameModal isOpen={showNameModal} onSubmit={handleSaveScore} gameTitle="Desafío de Memoria" />
 
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-8xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <div className="text-2xl text-white/90">
-            Movimientos: <span className={`text-${brandingData.color}-400 font-bold`}>{moves}</span>
-          </div>
-
-          <div className="flex justify-center items-center space-x-8 mb-6">
-            <div className={`text-2xl text-white/90 ${getTimerAnimation()}`}>
-              ⏰ Tiempo: <span className={`font-bold text-3xl ${getTimerColor()}`}>{formatTime(timeRemaining)}</span>
+          <div className="flex justify-center items-center space-x-10 mb-6">
+            <div className="text-5xl text-white/90 font-bold">
+              Movimientos: <span className={`text-${brandingData.color}-400 font-bold`}>{moves}</span>
             </div>
-            <div className="text-xl text-white/90">
+            <div className={`text-5xl text-white/90 font-bold ${getTimerAnimation()}`}>
+              ⏰ Tiempo: <span className={`font-bold text-5xl ${getTimerColor()}`}>{formatTime(timeRemaining)}</span>
+            </div>
+            <div className="text-5xl text-white/90 font-bold">
               Puntuación: <span className="text-green-400 font-bold">{gameWon ? calculateScore() : "---"}</span>
             </div>
           </div>
@@ -274,14 +273,14 @@ export default function MemoryGame() {
             onClick={initializeGame}
             variant="outline"
             size="lg"
-            className="text-white border-white/30 bg-white/10 hover:bg-white/20"
+            className="text-white text-2xl border-white/30 bg-white/10 hover:bg-white/20"
           >
-            <RotateCcw className="w-5 h-5 mr-2" />
+            <RotateCcw className="w-10 h-10 mr-2" />
             Reiniciar Juego
           </Button>
         </div>
 
-        <div className="grid grid-cols-4 gap-4 max-w-2xl mx-auto">
+        <div className="grid grid-cols-4 gap-4 max-w-8xl mx-auto">
           {cards.map((card) => (
             <Card
               key={card.id}
@@ -307,7 +306,7 @@ export default function MemoryGame() {
 
                   {/* Reverso de la carta */}
                   <div className="absolute w-full h-full backface-hidden rotate-y-180 flex items-center justify-center rounded-2xl">
-                    <img src={card.symbol} alt="card" className="h-24 w-24 object-contain" />
+                    <img src={card.symbol} alt="card" className="h-72 w-72 object-contain" />
                   </div>
                 </div>
               </CardContent>
@@ -315,9 +314,9 @@ export default function MemoryGame() {
           ))}
         </div>
 
-        <div className="text-center mt-8">
-          <p className="text-xl text-white/80">¡Encuentra todas las parejas para ganar!</p>
-          <p className="text-lg text-white/60 mt-2">Menos movimientos y tiempo = más puntos</p>
+        <div className="text-center mt-32">
+          <p className="text-5xl text-white/80">¡Encuentra todas las parejas para ganar!</p>
+          <p className="text-5xl text-white/60 mt-2">Menos movimientos y tiempo = más puntos</p>
         </div>
       </div>
     </GameLayout>

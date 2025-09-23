@@ -14,19 +14,19 @@ export default function GameLayout({ children, gameTitle }: GameLayoutProps) {
     <div className={`flex flex-col min-h-screen bg-gradient-to-br from-${brandingData.color}-900 via-${brandingData.color}-800 to-${brandingData.color}-900`}>
       {/* Game Header */}
       <header className="border-b border-white/20 bg-black/20 backdrop-blur-sm">
-        <div className="container mx-auto px-6 py-4">
+        <div className="container mx-auto px-6 py-12">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-8">
               <img
                 src={brandingData.logoUrl || "/placeholder.svg"}
                 alt={`${brandingData.companyName} Logo`}
-                width={60}
-                height={60}
+                width={200}
+                height={200}
                 className="rounded-full border-2 border-white bg-white p-1"
               />
               <div>
-                <h1 className="text-2xl font-bold text-white drop-shadow-md">{gameTitle}</h1>
-                <p className="text-sm text-white/80">{brandingData.companyName}</p>
+                <h1 className=" text-6xl font-bold text-white drop-shadow-md">{gameTitle}</h1>
+                <p className="text-4xl text-white/80">{brandingData.companyName}</p>
               </div>
             </div>
 
@@ -35,9 +35,9 @@ export default function GameLayout({ children, gameTitle }: GameLayoutProps) {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="text-white border-white/30 bg-white/10 backdrop-blur-sm hover:bg-white/20"
+                  className="text-white text-4xl border-white/30 bg-white/10 backdrop-blur-sm hover:bg-white/20"
                 >
-                  <ArrowLeft className="w-5 h-5 mr-2" />
+                  <ArrowLeft className="w-10 h-10 mr-2" />
                   Volver a Juegos
                 </Button>
               </a>
@@ -45,9 +45,9 @@ export default function GameLayout({ children, gameTitle }: GameLayoutProps) {
                 <Button
                   size="lg"
                   style={{ backgroundColor: brandingData.brandColor }}
-                  className="text-white font-semibold shadow-lg"
+                  className="text-white text-4xl font-semibold shadow-lg"
                 >
-                  <Home className="w-5 h-5 mr-2" />
+                  <Home className="w-10 h-10 mr-2" />
                   Inicio
                 </Button>
               </a>
@@ -65,9 +65,9 @@ export default function GameLayout({ children, gameTitle }: GameLayoutProps) {
       {/* Footer */}
       <footer className="border-t border-white/20 bg-black/20 backdrop-blur-sm mt-auto">
         {/* ADS BANNER */}
-        <Banner/>
-        <div className="container mx-auto px-6 py-4 text-center">
-          <p className="text-white/80">
+        {brandingData.showBanner && <Banner />}
+        <div className="container mx-auto px-6 py-12 text-center">
+          <p className="text-white/80 text-3xl">
             Powered by © {" "}
             <span style={{ color: brandingData.brandColor }} className="font-bold">
               Nuevos eventos
