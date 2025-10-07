@@ -12,15 +12,14 @@ import {
   type LeaderboardEntry,
   type PlayerScore,
 } from "@/lib/leaderboard"
+import brandingData from "@/utils/conts"
 
 const gameIcons: { [key: string]: any } = {
   trivia: Trophy,
   memory: Award,
   "word-game": Target,
   "simon-says": Target,
-  // "number-guess": Medal,
   "reaction-time": Clock,
-  // "rock-paper-scissors": Gamepad2,
 }
 
 const gameNames: { [key: string]: string } = {
@@ -28,9 +27,7 @@ const gameNames: { [key: string]: string } = {
   memory: "Desafío de Memoria",
   "word-game": "Maestro de Palabras",
   "simon-says": "Simón Dice",
-  // "number-guess": "Adivina el Número",
   "reaction-time": "Tiempo de Reacción",
-  // "rock-paper-scissors": "Piedra, Papel o Tijera",
 }
 
 export default function LeaderboardPage() {
@@ -85,17 +82,17 @@ export default function LeaderboardPage() {
         {/* Game Filter */}
         <Card className="bg-white/10 backdrop-blur-sm border-white/20 mb-8">
           <CardHeader>
-            <CardTitle className="text-2xl text-white text-center">Filtrar por Juego</CardTitle>
+            <CardTitle className="text-6xl text-white text-center">Filtrar por Juego</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-3 justify-center">
               <Button
                 onClick={() => setSelectedGame("all")}
                 variant={selectedGame === "all" ? "default" : "outline"}
-                className={
+                className={ 
                   selectedGame === "all"
-                    ? "bg-red-600 hover:bg-red-700"
-                    : "text-white border-white/30 bg-white/10 hover:bg-white/20"
+                    ? `bg-${brandingData.color}-600 hover:bg-${brandingData.color}-700 text-3xl h-12`
+                    : "text-white text-3xl border-white/30 bg-white/10 hover:bg-white/20 h-12"
                 }
               >
                 <Trophy className="w-4 h-4 mr-2" />
@@ -110,8 +107,8 @@ export default function LeaderboardPage() {
                     variant={selectedGame === gameId ? "default" : "outline"}
                     className={
                       selectedGame === gameId
-                        ? "bg-red-600 hover:bg-red-700"
-                        : "text-white border-white/30 bg-white/10 hover:bg-white/20"
+                        ? `bg-${brandingData.color}-600 hover:bg-${brandingData.color}-700 text-3xl h-12`
+                        : "text-white border-white/30 bg-white/10 hover:bg-white/20 text-3xl h-12"
                     }
                   >
                     <IconComponent className="w-4 h-4 mr-2" />
@@ -123,7 +120,7 @@ export default function LeaderboardPage() {
           </CardContent>
         </Card>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-8">
           {/* Global Leaderboard */}
           {selectedGame === "all" && (
             <Card className="bg-white/10 backdrop-blur-sm border-white/20">
@@ -137,7 +134,7 @@ export default function LeaderboardPage() {
                 {topPlayers.length === 0 ? (
                   <div className="text-center py-12">
                     <Trophy className="w-16 h-16 text-white/30 mx-auto mb-4" />
-                    <p className="text-xl text-white/70">¡Aún no hay puntuaciones!</p>
+                    <p className="text-4xl text-white/70">¡Aún no hay puntuaciones!</p>
                     <p className="text-white/50">Juega algunos juegos para aparecer aquí</p>
                   </div>
                 ) : (
@@ -154,15 +151,15 @@ export default function LeaderboardPage() {
                         <div className="flex items-center space-x-4">
                           {getRankIcon(index + 1)}
                           <div>
-                            <div className="text-lg font-bold text-white">{player.playerName}</div>
-                            <div className="text-sm text-white/70">
+                            <div className="text-4xl font-bold text-white">{player.playerName}</div>
+                            <div className="text-xl text-white/70">
                               {player.gamesPlayed} juegos • Última vez: {formatDate(player.lastPlayed)}
                             </div>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-2xl font-bold text-red-400">{player.totalScore}</div>
-                          <div className="text-sm text-white/70">puntos totales</div>
+                          <div className="text-4xl font-bold text-red-400">{player.totalScore}</div>
+                          <div className="text-xl text-white/70">puntos totales</div>
                         </div>
                       </div>
                     ))}
@@ -185,9 +182,9 @@ export default function LeaderboardPage() {
                 {gameScores.length === 0 ? (
                   <div className="text-center py-12">
                     <Trophy className="w-16 h-16 text-white/30 mx-auto mb-4" />
-                    <p className="text-xl text-white/70">¡Aún no hay puntuaciones para este juego!</p>
+                    <p className="text-4xl text-white/70">¡Aún no hay puntuaciones para este juego!</p>
                     <a href={`/games/${selectedGame}`}>
-                      <Button className="mt-4 bg-red-600 hover:bg-red-700">
+                      <Button className="mt-4 h-12 text-3xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.4)]">
                         <Gamepad2 className="w-4 h-4 mr-2" />
                         Jugar Ahora
                       </Button>
@@ -198,7 +195,7 @@ export default function LeaderboardPage() {
                     {gameScores.map((score, index) => (
                       <div
                         key={score.id}
-                        className={`flex items-center justify-between p-4 rounded-lg transition-all duration-300 ${
+                        className={`text-3xl flex items-center justify-between p-4 rounded-lg transition-all duration-300 ${
                           index < 3
                             ? "bg-gradient-to-r from-yellow-500/20 to-red-500/20 border border-yellow-500/30"
                             : "bg-white/5"
@@ -207,20 +204,20 @@ export default function LeaderboardPage() {
                         <div className="flex items-center space-x-4">
                           {getRankIcon(index + 1)}
                           <div>
-                            <div className="text-lg font-bold text-white">{score.playerName}</div>
-                            <div className="text-sm text-white/70">
+                            <div className="text-4xl font-bold text-white">{score.playerName}</div>
+                            <div className="text-xl text-white/70">
                               {score.details} • {formatDate(score.timestamp)}
                             </div>
                             {score.difficulty && (
-                              <Badge variant="outline" className="text-xs mt-1 border-white/30 text-white/80">
+                              <Badge variant="outline" className="text-xl mt-1 border-white/30 text-white/80">
                                 {score.difficulty}
                               </Badge>
                             )}
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-2xl font-bold text-red-400">{score.score}</div>
-                          <div className="text-sm text-white/70">puntos</div>
+                          <div className="text-4xl font-bold text-red-400">{score.score}</div>
+                          <div className="text-xl text-white/70">puntos</div>
                         </div>
                       </div>
                     ))}
@@ -233,34 +230,34 @@ export default function LeaderboardPage() {
           {/* Statistics */}
           <Card className="bg-white/10 backdrop-blur-sm border-white/20">
             <CardHeader>
-              <CardTitle className="text-2xl text-white text-center">📊 Estadísticas</CardTitle>
+              <CardTitle className="text-4xl text-white text-center">📊 Estadísticas</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-white/10 p-4 rounded-lg text-center">
-                    <div className="text-3xl font-bold text-blue-400">{topPlayers.length}</div>
-                    <div className="text-white/80">Jugadores Totales</div>
+                    <div className="text-4xl font-bold text-blue-400">{topPlayers.length}</div>
+                    <div className="text-white/80 text-xl">Jugadores Totales</div>
                   </div>
                   <div className="bg-white/10 p-4 rounded-lg text-center">
-                    <div className="text-3xl font-bold text-green-400">
+                    <div className="text-4xl font-bold text-green-400">
                       {topPlayers.reduce((sum, player) => sum + player.gamesPlayed, 0)}
                     </div>
-                    <div className="text-white/80">Partidas Jugadas</div>
+                    <div className="text-white/80 text-xl">Partidas Jugadas</div>
                   </div>
                 </div>
 
                 {topPlayers.length > 0 && (
                   <div className="space-y-3">
-                    <h4 className="text-lg font-bold text-white">🏆 Jugador Más Activo</h4>
+                    <h4 className="text-3xl font-bold text-white">🏆 Jugador Más Activo</h4>
                     <div className="bg-white/10 p-4 rounded-lg">
-                      <div className="text-lg font-bold text-yellow-400">
+                      <div className="text-3xl font-bold text-yellow-400">
                         {
                           topPlayers.reduce((most, player) => (player.gamesPlayed > most.gamesPlayed ? player : most))
                             .playerName
                         }
                       </div>
-                      <div className="text-white/80">
+                      <div className="text-white/80 text-xl">
                         {
                           topPlayers.reduce((most, player) => (player.gamesPlayed > most.gamesPlayed ? player : most))
                             .gamesPlayed
@@ -275,7 +272,7 @@ export default function LeaderboardPage() {
                   <Button
                     onClick={handleClearLeaderboard}
                     variant="outline"
-                    className="w-full text-red-400 border-red-400/30 bg-red-400/10 hover:bg-red-400/20"
+                    className="text-3xl h-18 w-full text-red-400 border-red-400/30 bg-red-400/10 hover:bg-red-400/20"
                   >
                     <RotateCcw className="w-4 h-4 mr-2" />
                     Limpiar Leaderboard

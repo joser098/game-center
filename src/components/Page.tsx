@@ -87,7 +87,7 @@ export default function HomePage() {
                 className="rounded-full border-4 border-white shadow-2xl bg-white p-2"
               />
               <div
-                className="absolute -inset-2 rounded-full opacity-20 animate-pulse"
+                className="absolute -inset-2 rounded-full opacity-20"
                 style={{ backgroundColor: brandingData.brandColor }}
               />
             </div>
@@ -96,7 +96,7 @@ export default function HomePage() {
               {/* <h1 className="text-6xl font-bold text-white tracking-tight drop-shadow-lg">
                 {brandingData.companyName}
               </h1> */}
-              <p className={`text-3xl font-bold text-white bg-${brandingData.color}-600 px-6 py-3 rounded-full border-2 border-white shadow-lg`}>
+              <p className={`text-4xl font-bold text-white bg-${brandingData.color}-600 px-6 py-6 rounded-full border-2 border-white shadow-lg`}>
                 {brandingData.motive}
               </p>
             </div>
@@ -110,7 +110,7 @@ export default function HomePage() {
           <a href="/leaderboard">
             <Button
               size="lg"
-              className="cursor-pointer text-2xl py-6 px-12 bg-yellow-600 hover:bg-yellow-700 text-white font-bold shadow-2xl border-2 border-yellow-400"
+              className="cursor-pointer text-5xl py-6 px-12 bg-yellow-600 hover:bg-yellow-700 text-white font-bold shadow-2xl border-2 border-yellow-400"
             >
               <Crown className="w-8 h-8 mr-3" />Tabla de Puntuaciones
             </Button>
@@ -121,11 +121,11 @@ export default function HomePage() {
       {/* Games Section */}
       <main className="container mx-auto px-8 py-4">
         <div className="text-center pt-4 pb-8">
-          <h2 className="text-2xl font-bold text-white drop-shadow-lg">¡Selecciona un juego y comienza la diversión!</h2>
+          <h2 className="text-5xl font-bold text-white drop-shadow-lg">¡Selecciona un juego y comienza la diversión!</h2>
           {/* <p className="text-xl text-white/90">¡Selecciona un juego y comienza la diversión!</p> */}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mx-auto">
           {games.map((game) => {
             const IconComponent = game.icon
             return (
@@ -142,19 +142,18 @@ export default function HomePage() {
                       <IconComponent className="w-12 h-12" style={{ color: '#fff' }} />
                     </div>
                   </div>
-                  <CardTitle className="text-2xl text-white drop-shadow-md">{game.name}</CardTitle>
+                  <CardTitle className="text-5xl text-white drop-shadow-md">{game.name}</CardTitle>
                 </CardHeader>
                 <CardContent className="text-center space-y-2">
-                  <p className="text-lg text-white/90">{game.description}</p>
-                  <div className="flex justify-evenly space-y-2 text-white/80">
-                    <p className="text-lg">👥 {game.players}</p>
-                    <p className="text-lg">⏱️ {game.duration}</p>
-                  </div>
-
+                  <p className="text-3xl text-white/90">{game.description}</p>
+                  {/* <div className="flex justify-evenly space-y-8 text-white/80">
+                    <p className="text-3xl">👥 {game.players}</p>
+                    <p className="text-3xl">⏱️ {game.duration}</p>
+                  </div> */}
                   <a href={`/games/${game.id}`}>
                     <Button
                       size="lg"
-                      className="w-full text-xl py-6 text-white font-bold shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-white/20"
+                      className="w-full text-5xl py-6 text-white font-bold shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-white/20"
                       style={{ backgroundColor: brandingData.brandColor }}
                     >
                       <Gamepad2 className="w-6 h-6 mr-3" />

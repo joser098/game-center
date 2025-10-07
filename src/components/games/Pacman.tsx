@@ -3,13 +3,14 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import GameLayout from "@/components/game-layout"
 import PlayerNameModal from "@/components/player-name-modal"
-import { Trophy, Play, RotateCcw, Pause, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from "lucide-react"
+import { Trophy, Play, RotateCcw, Pause, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Ghost, CircleDot, Dot, Star } from "lucide-react"
 import { saveScore, generatePlayerId } from "@/lib/leaderboard"
 import brandingData from "@/utils/conts"
 
 const BOARD_WIDTH = 19
 const BOARD_HEIGHT = 21
-const CELL_SIZE = 20
+// const CELL_SIZE = 20
+const CELL_SIZE = Math.floor(1400 / BOARD_WIDTH)
 
 // Simple maze layout (1 = wall, 0 = dot, 2 = power pellet, 3 = empty)
 const INITIAL_MAZE = [
@@ -318,44 +319,41 @@ export default function PacmanGame() {
   }, [isPlaying, gameOver, movePacman])
 
   const renderCell = (cell: number, x: number, y: number) => {
-    const isPacmanHere = pacman.x === x && pacman.y === y
-    const ghost = ghosts.find((g) => g.x === x && g.y === y)
+    const isPacmanHere = pacman.x === x && pacman.y === y;
+    const ghost = ghosts.find((g) => g.x === x && g.y === y);
 
-    let content = ""
-    let bgColor = "#000"
+    let icon = null;
+    let bgColor = "#000";
 
     if (cell === 1) {
-      bgColor = "#0000ff"
+      bgColor = "#0000ff";
     } else if (cell === 0) {
-      content = "•"
-      bgColor = "#000"
+      icon = <Dot size={10} color="#fff" />;
     } else if (cell === 2) {
-      content = "●"
-      bgColor = "#000"
+      icon = <Star size={14} color="#f5e050" />;
     }
 
     if (isPacmanHere) {
-      content = "🟡"
+      icon = <CircleDot size={18} color="#ffff00" />;
     } else if (ghost) {
-      content = powerMode ? "👻" : "👾"
+      icon = <Ghost size={18} color={powerMode ? "#00ffff" : ghost.color} />;
     }
 
     return (
       <div
         key={`${x}-${y}`}
-        className="flex items-center justify-center text-xs font-bold"
+        className="flex items-center justify-center"
         style={{
           width: CELL_SIZE,
           height: CELL_SIZE,
           backgroundColor: bgColor,
-          color: ghost ? ghost.color : "#ffff00",
           border: cell === 1 ? "1px solid #4444ff" : "none",
         }}
       >
-        {content}
+        {icon}
       </div>
-    )
-  }
+    );
+  };
 
   if ((gameOver || gameWon) && !showNameModal) {
     return (
@@ -415,14 +413,14 @@ export default function PacmanGame() {
   if (!isPlaying) {
     return (
       <GameLayout gameTitle="Pac-Man">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-8xl mx-auto text-center">
           <Card className="bg-white/10 backdrop-blur-sm border-white/20 mb-8">
             <CardHeader>
               <CardTitle className="text-4xl text-white">🟡 Pac-Man</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <p className="text-2xl text-white/90">El clásico juego de comecocos</p>
-              <div className="text-lg text-white/80 space-y-2">
+              <p className="text-4xl text-white/90">El clásico juego de comecocos</p>
+              <div className="text-3xl text-white/80 space-y-2">
                 <p>🎯 Come todos los puntos para ganar</p>
                 <p>⬅️➡️⬆️⬇️ Usa las flechas para moverte</p>
                 <p>👾 Evita a los fantasmas</p>
@@ -430,7 +428,7 @@ export default function PacmanGame() {
                 <p>⏸️ Presiona 'P' para pausar</p>
                 <p className="text-green-400 font-bold">💰 10 puntos por punto, 50 por píldora, 200 por fantasma</p>
               </div>
-              <Button onClick={startGame} size="lg" className={`text-2xl py-8 px-12 bg-${brandingData.color}-600 hover:bg-${brandingData.color}-700`}>
+              <Button onClick={startGame} size="lg" className={`text-2xl py-8 px-12 bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.6)]`}>
                 <Play className="w-8 h-8 mr-3" />
                 ¡Comenzar Juego!
               </Button>
@@ -445,14 +443,14 @@ export default function PacmanGame() {
     <GameLayout gameTitle="Pac-Man">
       <PlayerNameModal isOpen={showNameModal} onSubmit={handleSaveScore} gameTitle="Pac-Man" />
 
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-8xl mx-auto">
+        <div className="grid grid-cols-1 gap-8">
           {/* Game Board */}
           <div className="lg:col-span-2">
             <Card className="bg-white/10 backdrop-blur-sm border-white/20">
               <CardContent className="p-6">
                 <div className="flex justify-center">
-                  <div className="bg-black p-2 rounded-lg border-2 border-gray-600">
+                  <div className="w-full max-w-[1400px] aspect-square bg-black p-2 rounded-lg border-2 border-gray-600">
                     <div
                       className="grid gap-0"
                       style={{ gridTemplateColumns: `repeat(${BOARD_WIDTH}, ${CELL_SIZE}px)` }}
@@ -466,11 +464,11 @@ export default function PacmanGame() {
           </div>
 
           {/* Game Info */}
-          <div className="space-y-6">
+          <div className="space-y-6 grid grid-cols-3 gap-8">
             {/* Score */}
             <Card className="bg-white/10 backdrop-blur-sm border-white/20">
               <CardHeader>
-                <CardTitle className="text-2xl text-white text-center">Puntuación</CardTitle>
+                <CardTitle className="text-4xl text-white text-center">Puntuación</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="text-center">
@@ -478,14 +476,14 @@ export default function PacmanGame() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-white/10 p-3 rounded-lg text-center">
-                    <div className="text-xl font-bold text-green-400">{lives}</div>
-                    <div className="text-white/80 text-sm">Vidas</div>
+                    <div className="text-2xl font-bold text-green-400">{lives}</div>
+                    <div className="text-white/80 text-2xl">Vidas</div>
                   </div>
                   <div className="bg-white/10 p-3 rounded-lg text-center">
-                    <div className={`text-xl font-bold ${powerMode ? "text-yellow-400" : "text-gray-400"}`}>
+                    <div className={`text-2xl font-bold ${powerMode ? "text-yellow-400" : "text-gray-400"}`}>
                       {powerMode ? powerModeTimer : "OFF"}
                     </div>
-                    <div className="text-white/80 text-sm">Power</div>
+                    <div className="text-white/80 text-2xl">Power</div>
                   </div>
                 </div>
               </CardContent>
@@ -494,7 +492,7 @@ export default function PacmanGame() {
             {/* Controls */}
             <Card className="bg-white/10 backdrop-blur-sm border-white/20">
               <CardHeader>
-                <CardTitle className="text-xl text-white text-center">Controles</CardTitle>
+                <CardTitle className="text-4xl text-white text-center">Controles</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-3 gap-2">
@@ -502,15 +500,15 @@ export default function PacmanGame() {
                   <Button
                     onClick={() => movePacman("up")}
                     variant="outline"
-                    className="text-white border-white/30 bg-white/10 hover:bg-white/20"
+                    className="h-22 text-white border-white/30 bg-white/10 hover:bg-white/20"
                   >
-                    <ArrowUp className="w-4 h-4" />
+                    <ArrowUp className="w-12 h-12" />
                   </Button>
                   <div></div>
                   <Button
                     onClick={() => movePacman("left")}
                     variant="outline"
-                    className="text-white border-white/30 bg-white/10 hover:bg-white/20"
+                    className="h-22 text-white border-white/30 bg-white/10 hover:bg-white/20"
                   >
                     <ArrowLeft className="w-4 h-4" />
                   </Button>
@@ -518,7 +516,7 @@ export default function PacmanGame() {
                   <Button
                     onClick={() => movePacman("right")}
                     variant="outline"
-                    className="text-white border-white/30 bg-white/10 hover:bg-white/20"
+                    className="h-22 text-white border-white/30 bg-white/10 hover:bg-white/20"
                   >
                     <ArrowRight className="w-4 h-4" />
                   </Button>
@@ -526,14 +524,14 @@ export default function PacmanGame() {
                   <Button
                     onClick={() => movePacman("down")}
                     variant="outline"
-                    className="text-white border-white/30 bg-white/10 hover:bg-white/20"
+                    className="h-22 text-white border-white/30 bg-white/10 hover:bg-white/20"
                   >
                     <ArrowDown className="w-4 h-4" />
                   </Button>
                   <div></div>
                 </div>
-                <Button onClick={togglePause} className="w-full bg-yellow-600 hover:bg-yellow-700">
-                  <Pause className="w-4 h-4 mr-2" />
+                <Button onClick={togglePause} className="h-16 text-3xl w-full bg-yellow-600 hover:bg-yellow-700">
+                  <Pause className="w-12 h-12 mr-2" />
                   {isPaused ? "Reanudar" : "Pausar"}
                 </Button>
               </CardContent>
@@ -542,9 +540,9 @@ export default function PacmanGame() {
             {/* Legend */}
             <Card className="bg-white/10 backdrop-blur-sm border-white/20">
               <CardHeader>
-                <CardTitle className="text-xl text-white text-center">Leyenda</CardTitle>
+                <CardTitle className="text-4xl text-white text-center">Leyenda</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2 text-sm text-white/80">
+              <CardContent className="space-y-2 text-2xl text-white/80">
                 <div className="flex items-center justify-between">
                   <span>🟡 Pac-Man</span>
                   <span>Tú</span>

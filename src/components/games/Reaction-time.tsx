@@ -87,14 +87,14 @@ export default function ReactionTimeGame() {
   if (gameState === "waiting") {
     return (
       <GameLayout gameTitle="Tiempo de Reacción">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-8xl mx-auto text-center">
           <Card className="bg-white/10 backdrop-blur-sm border-white/20 mb-8">
             <CardHeader>
-              <CardTitle className="text-4xl text-white">⚡ Tiempo de Reacción</CardTitle>
+              <CardTitle className="text-8xl text-white">⚡ Tiempo de Reacción</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <p className="text-2xl text-white/90">Pon a prueba la velocidad de tus reflejos</p>
-              <div className="text-lg text-white/80 space-y-2">
+              <p className="text-4xl text-white/90">Pon a prueba la velocidad de tus reflejos</p>
+              <div className="text-3xl text-white/80 space-y-2">
                 <p>🎯 Espera a que aparezca la señal verde</p>
                 <p>⚡ Haz clic lo más rápido posible</p>
                 <p>⏱️ Mide tu tiempo de reacción</p>
@@ -104,23 +104,23 @@ export default function ReactionTimeGame() {
               {attempts.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
                   <div className="bg-white/10 p-4 rounded-lg">
-                    <div className="text-2xl font-bold text-green-400">{bestTime}ms</div>
+                    <div className="text-6xl font-bold text-green-400">{bestTime}ms</div>
                     <div className="text-white/80">Mejor Tiempo</div>
                   </div>
                   <div className="bg-white/10 p-4 rounded-lg">
-                    <div className="text-2xl font-bold text-blue-400">{averageTime}ms</div>
+                    <div className="text-6xl font-bold text-blue-400">{averageTime}ms</div>
                     <div className="text-white/80">Promedio</div>
                   </div>
                   <div className="bg-white/10 p-4 rounded-lg">
-                    <div className="text-2xl font-bold text-yellow-400">{attempts.length}</div>
+                    <div className="text-6xl font-bold text-yellow-400">{attempts.length}</div>
                     <div className="text-white/80">Intentos</div>
                   </div>
                 </div>
               )}
 
               <div className="flex gap-4 justify-center">
-                <Button onClick={startGame} size="lg" className={`text-2xl py-8 px-12 bg-${brandingData.color}-600 hover:bg-${brandingData.color}-700`}>
-                  <Play className="w-8 h-8 mr-3" />
+                <Button onClick={startGame} size="lg" className={`text-3xl py-8 px-12 bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.4)]`}>
+                  <Play className="w-12 h-12 mr-3" />
                   ¡Comenzar!
                 </Button>
                 {attempts.length > 0 && (
@@ -128,7 +128,7 @@ export default function ReactionTimeGame() {
                     onClick={resetAll}
                     size="lg"
                     variant="outline"
-                    className="text-white border-white/30 bg-white/10 hover:bg-white/20"
+                    className="text-white text-3xl border-white/30 bg-white/10 hover:bg-white/20"
                   >
                     <RotateCcw className="w-6 h-6 mr-2" />
                     Reiniciar Todo
@@ -144,17 +144,17 @@ export default function ReactionTimeGame() {
 
   return (
     <GameLayout gameTitle="Tiempo de Reacción">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-8xl mx-auto">
         <div className="text-center mb-8">
           {attempts.length > 0 && (
             <div className="flex justify-center items-center space-x-8 mb-6">
-              <div className="text-xl text-white/90">
+              <div className="text-4xl text-white/90">
                 Mejor: <span className="text-green-400 font-bold">{bestTime}ms</span>
               </div>
-              <div className="text-xl text-white/90">
+              <div className="text-4xl text-white/90">
                 Promedio: <span className="text-blue-400 font-bold">{averageTime}ms</span>
               </div>
-              <div className="text-xl text-white/90">
+              <div className="text-4xl text-white/90">
                 Intentos: <span className="text-yellow-400 font-bold">{attempts.length}</span>
               </div>
             </div>
@@ -164,7 +164,7 @@ export default function ReactionTimeGame() {
         <Card className="bg-white/10 backdrop-blur-sm border-white/20">
           <CardContent className="p-12">
             <div
-              className={`w-full h-96 rounded-2xl flex items-center justify-center cursor-pointer transition-all duration-300 ${
+              className={`w-full h-[600px] rounded-2xl flex items-center justify-center cursor-pointer transition-all duration-300 ${
                 gameState === "ready" && countdown > 0
                   ? "bg-yellow-500"
                   : gameState === "ready" && countdown === 0
@@ -183,14 +183,14 @@ export default function ReactionTimeGame() {
                 {gameState === "ready" && countdown > 0 && (
                   <div>
                     <div className="text-8xl font-bold text-white mb-4">{countdown}</div>
-                    <div className="text-2xl text-white">Prepárate...</div>
+                    <div className="text-4xl text-white">Prepárate...</div>
                   </div>
                 )}
 
                 {gameState === "ready" && countdown === 0 && (
                   <div>
                     <Clock className="w-24 h-24 text-white mx-auto mb-4" />
-                    <div className="text-2xl text-white">Espera la señal verde...</div>
+                    <div className="text-4xl text-white">Espera la señal verde...</div>
                   </div>
                 )}
 
@@ -204,8 +204,8 @@ export default function ReactionTimeGame() {
                 {gameState === "clicked" && reactionTime && (
                   <div>
                     <Trophy className="w-24 h-24 text-white mx-auto mb-4" />
-                    <div className="text-6xl font-bold text-white mb-4">{reactionTime}ms</div>
-                    <div className={`text-2xl font-bold ${getReactionRating(reactionTime).color}`}>
+                    <div className="text-8xl font-bold text-white mb-4">{reactionTime}ms</div>
+                    <div className={`text-4xl font-bold ${getReactionRating(reactionTime).color}`}>
                       {getReactionRating(reactionTime).text}
                     </div>
                   </div>
@@ -214,8 +214,8 @@ export default function ReactionTimeGame() {
                 {gameState === "tooEarly" && (
                   <div>
                     <div className="text-6xl mb-4">😅</div>
-                    <div className="text-3xl font-bold text-white mb-2">¡Muy temprano!</div>
-                    <div className="text-xl text-white">Espera la señal verde</div>
+                    <div className="text-4xl font-bold text-white mb-2">¡Muy temprano!</div>
+                    <div className="text-4xl text-white">Espera la señal verde</div>
                   </div>
                 )}
               </div>
@@ -225,7 +225,7 @@ export default function ReactionTimeGame() {
 
         <div className="text-center mt-8 space-x-4">
           {(gameState === "clicked" || gameState === "tooEarly") && (
-            <Button onClick={startGame} size="lg" className="bg-red-600 hover:bg-red-700">
+            <Button onClick={startGame} size="lg" className="text-3xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.4)]">
               <Play className="w-5 h-5 mr-2" />
               Intentar de Nuevo
             </Button>
@@ -234,7 +234,7 @@ export default function ReactionTimeGame() {
             onClick={resetGame}
             variant="outline"
             size="lg"
-            className="text-white border-white/30 bg-white/10 hover:bg-white/20"
+            className="text-white text-3xl border-white/30 bg-white/10 hover:bg-white/20"
           >
             <RotateCcw className="w-5 h-5 mr-2" />
             Cancelar

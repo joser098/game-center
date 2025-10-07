@@ -139,7 +139,7 @@ const brandingData = {
     Animales: ["ELEFANTE", "JIRAFA", "PINGUINO", "DELFIN", "MARIPOSA"],
     Tecnología: ["COMPUTADORA", "INTERNET", "SOFTWARE", "TECLADO", "MONITOR"],
   },
-  showBanner: true,
+  showBanner: false,
   gamesToShow: {
     trivia: true,
     memory: true,

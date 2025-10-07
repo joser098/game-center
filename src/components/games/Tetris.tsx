@@ -327,7 +327,7 @@ export default function TetrisGame() {
         {row.map((cell, x) => (
           <div
             key={x}
-            className="w-6 h-6 border border-gray-600"
+            className=" w-16 h-16 border border-gray-600"
             style={{
               backgroundColor: cell || "#1a1a1a",
             }}
@@ -352,7 +352,7 @@ export default function TetrisGame() {
                 return (
                   <div
                     key={`${y}-${x}`}
-                    className="w-4 h-4 border border-gray-700"
+                    className="w-8 h-8 border border-gray-700"
                     style={{
                       backgroundColor: hasBlock ? nextPiece.color : "#1a1a1a",
                     }}
@@ -423,11 +423,11 @@ export default function TetrisGame() {
         <div className="max-w-4xl mx-auto text-center">
           <Card className="bg-white/10 backdrop-blur-sm border-white/20 mb-8">
             <CardHeader>
-              <CardTitle className="text-4xl text-white">🧩 Tetris</CardTitle>
+              <CardTitle className="text-6xl text-white">🧩 Tetris</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <p className="text-2xl text-white/90">El clásico juego de bloques que caen</p>
-              <div className="text-lg text-white/80 space-y-2">
+              <p className="text-4xl text-white/90">El clásico juego de bloques que caen</p>
+              <div className="text-3xl text-white/80 space-y-2">
                 <p>🎯 Completa líneas horizontales para eliminarlas</p>
                 <p>⬅️➡️ Usa las flechas para mover las piezas</p>
                 <p>⬇️ Flecha abajo para acelerar la caída</p>
@@ -435,7 +435,7 @@ export default function TetrisGame() {
                 <p>⏸️ Presiona 'P' para pausar</p>
                 <p className="text-green-400 font-bold">💰 10 puntos por pieza + 100 × líneas × nivel</p>
               </div>
-              <Button onClick={startGame} size="lg" className={`text-2xl py-8 px-12 bg-${brandingData.color}-600 hover:bg-${brandingData.color}-700`}>
+              <Button onClick={startGame} size="lg" className={`text-2xl py-8 px-12 bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.4)]`}>
                 <Play className="w-8 h-8 mr-3" />
                 ¡Comenzar Juego!
               </Button>
@@ -450,13 +450,13 @@ export default function TetrisGame() {
     <GameLayout gameTitle="Tetris">
       <PlayerNameModal isOpen={showNameModal} onSubmit={handleSaveScore} gameTitle="Tetris" />
 
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-8xl mx-auto">
+        <div className="grid grid-cols-1  gap-8">
           {/* Game Board */}
           <div className="lg:col-span-2">
             <Card className="bg-white/10 backdrop-blur-sm border-white/20">
               <CardContent className="p-6">
-                <div className="flex justify-center">
+                <div className="flex justify-center w-full max-w-[1400px] aspect-square">
                   <div className="bg-black p-4 rounded-lg border-2 border-gray-600">{renderBoard()}</div>
                 </div>
               </CardContent>
@@ -464,11 +464,11 @@ export default function TetrisGame() {
           </div>
 
           {/* Game Info */}
-          <div className="space-y-6">
+          <div className="space-y-6 grid grid-cols-3 gap-8">
             {/* Score */}
             <Card className="bg-white/10 backdrop-blur-sm border-white/20">
               <CardHeader>
-                <CardTitle className="text-2xl text-white text-center">Puntuación</CardTitle>
+                <CardTitle className="text-4xl text-white text-center">Puntuación</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="text-center">
@@ -476,12 +476,12 @@ export default function TetrisGame() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-white/10 p-3 rounded-lg text-center">
-                    <div className="text-xl font-bold text-blue-400">{lines}</div>
-                    <div className="text-white/80 text-sm">Líneas</div>
+                    <div className="text-3xl font-bold text-blue-400">{lines}</div>
+                    <div className="text-white/80 text-3xl">Líneas</div>
                   </div>
                   <div className="bg-white/10 p-3 rounded-lg text-center">
-                    <div className="text-xl font-bold text-green-400">{level}</div>
-                    <div className="text-white/80 text-sm">Nivel</div>
+                    <div className="text-3xl font-bold text-green-400">{level}</div>
+                    <div className="text-white/80 text-3xl">Nivel</div>
                   </div>
                 </div>
               </CardContent>
@@ -490,7 +490,7 @@ export default function TetrisGame() {
             {/* Next Piece */}
             <Card className="bg-white/10 backdrop-blur-sm border-white/20">
               <CardHeader>
-                <CardTitle className="text-xl text-white text-center">Siguiente</CardTitle>
+                <CardTitle className="text-4xl text-white text-center">Siguiente</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex justify-center">
@@ -502,41 +502,41 @@ export default function TetrisGame() {
             {/* Controls */}
             <Card className="bg-white/10 backdrop-blur-sm border-white/20">
               <CardHeader>
-                <CardTitle className="text-xl text-white text-center">Controles</CardTitle>
+                <CardTitle className="text-4xl text-white text-center">Controles</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-2">
                   <Button
                     onClick={() => movePiece(-1, 0)}
                     variant="outline"
-                    className="text-white border-white/30 bg-white/10 hover:bg-white/20"
+                    className="h-22 text-white border-white/30 bg-white/10 hover:bg-white/20"
                   >
-                    <ArrowLeft className="w-4 h-4" />
+                    <ArrowLeft className="w-12 h-12" />
                   </Button>
                   <Button
                     onClick={() => movePiece(1, 0)}
                     variant="outline"
-                    className="text-white border-white/30 bg-white/10 hover:bg-white/20"
+                    className="h-22 text-white border-white/30 bg-white/10 hover:bg-white/20"
                   >
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-12 h-12" />
                   </Button>
                   <Button
                     onClick={() => movePiece(0, 1)}
                     variant="outline"
-                    className="text-white border-white/30 bg-white/10 hover:bg-white/20"
+                    className="h-22 text-white border-white/30 bg-white/10 hover:bg-white/20"
                   >
-                    <ArrowDown className="w-4 h-4" />
+                    <ArrowDown className="w-12 h-12" />
                   </Button>
                   <Button
                     onClick={rotatePieceHandler}
                     variant="outline"
-                    className="text-white border-white/30 bg-white/10 hover:bg-white/20"
+                    className="h-22 text-white border-white/30 bg-white/10 hover:bg-white/20"
                   >
-                    <RotateCw className="w-4 h-4" />
+                    <RotateCw className="w-12 h-12" />
                   </Button>
                 </div>
-                <Button onClick={togglePause} className="w-full bg-yellow-600 hover:bg-yellow-700">
-                  <Pause className="w-4 h-4 mr-2" />
+                <Button onClick={togglePause} className="h-16 text-2xl w-full bg-yellow-600 hover:bg-yellow-700">
+                  <Pause className="w-12 h-12 mr-2" />
                   {isPaused ? "Reanudar" : "Pausar"}
                 </Button>
               </CardContent>

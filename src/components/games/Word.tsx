@@ -117,14 +117,14 @@ export default function WordGame() {
   if (showCategorySelector) {
     return (
       <GameLayout gameTitle="Maestro de Palabras">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-8xl mx-auto text-center">
           <Card className="bg-white/10 backdrop-blur-sm border-white/20 mb-8">
             <CardHeader>
-              <CardTitle className="text-4xl text-white">📚 Selecciona una Categoría</CardTitle>
+              <CardTitle className="text-6xl text-white">📚 Selecciona una Categoría</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-8">
               <p className="text-2xl text-white/90">Elige la categoría de palabras que quieres adivinar</p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {Object.entries(brandingData.wordCategories).map(([category, words]) => (
                   <Card
                     key={category}
@@ -134,9 +134,9 @@ export default function WordGame() {
                       initializeGame(category)
                     }}
                   >
-                    <CardContent className="p-6 text-center">
-                      <h3 className="text-2xl font-bold text-white mb-2">{category}</h3>
-                      <p className="text-white/80 mb-4">{words.length} palabras disponibles</p>
+                    <CardContent className="p-12 text-center">
+                      <h3 className="text-6xl font-bold text-white mb-2">{category}</h3>
+                      <p className="text-white/80 mb-8 text-4xl">{words.length} palabras disponibles</p>
                     </CardContent>
                   </Card>
                 ))}
@@ -181,15 +181,15 @@ export default function WordGame() {
   // 📌 Juego normal
   return (
     <GameLayout gameTitle="Maestro de Palabras">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-8xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <div className="text-2xl text-white/90">
+          <div className="text-5xl text-white/90">
             Puntuación: <span className={`text-${brandingData.color}-400 font-bold`}>{score}</span>
           </div>
-          <div className="text-2xl text-white/90">
+          <div className="text-5xl text-white/90">
             Categoría: <span className="text-green-400 font-bold">{currentCategory}</span>
           </div>
-          <div className="text-2xl text-white/90">
+          <div className="text-5xl text-white/90">
             Palabras restantes: <span className="text-yellow-400 font-bold">{remainingWords.length + 1}</span>
           </div>
         </div>
@@ -198,41 +198,41 @@ export default function WordGame() {
           <CardHeader>
             <CardTitle className="text-center">
               <div className="flex items-center justify-center space-x-4 mb-4">
-                <Clock className={`w-8 h-8 text-${brandingData.color}-400`} />
-                <span className="text-3xl text-white">Adivina la Palabra</span>
-                <Zap className="w-8 h-8 text-yellow-400" />
+                <Clock className={`w-12 h-12 text-${brandingData.color}-400`} />
+                <span className="text-5xl text-white">Adivina la Palabra</span>
+                <Zap className="w-12 h-12 text-yellow-400" />
               </div>
             </CardTitle>
           </CardHeader>
           <CardContent className="text-center space-y-6">
-            <div className={`text-6xl font-mono font-bold text-${brandingData.color}-400 tracking-wider`}>
+            <div className={`text-8xl font-mono font-bold text-${brandingData.color}-400 tracking-wider`}>
               {displayWord()}
             </div>
 
-            <div className="text-2xl text-white/90">
+            <div className="text-4xl text-white/90">
               Errores: {wrongGuesses} / {maxWrongGuesses}
             </div>
 
             {gameWon && (
               <div className="space-y-4">
                 <Trophy className="w-16 h-16 text-yellow-500 mx-auto" />
-                <p className="text-3xl text-green-400 font-bold">¡Correcto! 🎉</p>
-                <Button onClick={nextWord} size="lg" className="text-xl py-6 px-12 bg-green-600 hover:bg-green-700">
+                <p className="text-6xl text-green-400 font-bold">¡Correcto! 🎉</p>
+                <Button onClick={nextWord} size="lg" className="text-3xl py-6 px-12 bg-green-600 shadow-2xl hover:bg-green-700">
                   Siguiente Palabra
                 </Button>
               </div>
             )}
 
             {gameLost && (
-              <div className="space-y-4">
-                <p className={`text-3xl text-${brandingData.color}-400 font-bold`}>¡Fallaste!</p>
-                <p className="text-2xl text-white/90">
+              <div className="space-y-8">
+                <p className={`text-6xl text-red-400 font-bold`}>¡Fallaste!</p>
+                <p className="text-4xl text-white/90">
                   La palabra era: <span className={`text-${brandingData.color}-400 font-bold`}>{currentWord}</span>
                 </p>
                 <Button
                   onClick={nextWord}
                   size="lg"
-                  className={`text-xl py-6 px-12 bg-${brandingData.color}-600 hover:bg-${brandingData.color}-700`}
+                  className={`text-3xl py-6 px-12 bg-${brandingData.color}-600 shadow-2xl hover:bg-${brandingData.color}-700`}
                 >
                   Intentar Siguiente
                 </Button>
@@ -242,14 +242,14 @@ export default function WordGame() {
         </Card>
 
         {!gameWon && !gameLost && (
-          <div className="grid grid-cols-6 md:grid-cols-13 gap-2">
+          <div className="grid grid-cols-6 md:grid-cols-13 gap-4">
             {alphabet.map((letter) => (
               <Button
                 key={letter}
                 onClick={() => handleGuess(letter)}
                 disabled={guessedLetters.includes(letter)}
                 variant={guessedLetters.includes(letter) ? "secondary" : "outline"}
-                className={`aspect-square text-xl font-bold h-16 ${
+                className={`aspect-square text-6xl font-bold h-28 ${
                   guessedLetters.includes(letter)
                     ? currentWord.includes(letter)
                       ? "bg-green-600 text-white"

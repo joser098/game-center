@@ -130,18 +130,18 @@ export default function SimonSaysGame() {
   if (gameOver && !showNameModal) {
     return (
       <GameLayout gameTitle="Simón Dice">
-        <div className="max-w-2xl mx-auto text-center">
+        <div className="max-w-8xl mx-auto text-center">
           <Card className="bg-white/10 backdrop-blur-sm border-white/20">
             <CardHeader>
               <div className="flex justify-center mb-4">
                 <Trophy className="w-20 h-20 text-yellow-500" />
               </div>
-              <CardTitle className="text-4xl text-white">¡Juego Terminado!</CardTitle>
+              <CardTitle className="text-6xl text-white">¡Juego Terminado!</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="text-6xl font-bold text-red-400">{score}</div>
-              <div className="text-3xl font-bold text-green-400">{calculateScore()} puntos</div>
-              <p className="text-2xl text-white/90">
+              <div className="text-4xl font-bold text-green-400">{calculateScore()} puntos</div>
+              <p className="text-4xl text-white/90">
                 {score === 0
                   ? "¡Inténtalo de nuevo! 💪"
                   : score < 5
@@ -150,9 +150,9 @@ export default function SimonSaysGame() {
                       ? "¡Excelente memoria! 🧠"
                       : "¡Eres un maestro! 🎉"}
               </p>
-              <p className="text-lg text-white/70">¡Tu puntuación ha sido guardada en el leaderboard!</p>
+              <p className="text-3xl text-white/70">¡Tu puntuación ha sido guardada en el leaderboard!</p>
               <div className="flex gap-4 justify-center">
-                <Button onClick={startGame} size="lg" className="text-xl py-6 px-8 bg-red-600 hover:bg-red-700">
+                <Button onClick={startGame} size="lg" className="text-xl py-6 px-8 bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.4)]">
                   <Play className="w-6 h-6 mr-2" />
                   Jugar de Nuevo
                 </Button>
@@ -176,21 +176,21 @@ export default function SimonSaysGame() {
   if (!isPlaying) {
     return (
       <GameLayout gameTitle="Simón Dice">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-8xl mx-auto text-center">
           <Card className="bg-white/10 backdrop-blur-sm border-white/20 mb-8">
             <CardHeader>
-              <CardTitle className="text-4xl text-white">🎵 Simón Dice</CardTitle>
+              <CardTitle className="text-6xl text-white">🎵 Simón Dice</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <p className="text-2xl text-white/90">Memoriza y repite la secuencia de colores que Simón te muestre</p>
-              <div className="text-lg text-white/80 space-y-2">
+              <p className="text-4xl text-white/90">Memoriza y repite la secuencia de colores que Simón te muestre</p>
+              <div className="text-3xl text-white/80 space-y-2">
                 <p>🎯 Observa la secuencia de colores</p>
                 <p>🖱️ Repite la secuencia haciendo clic en los colores</p>
                 <p>📈 Cada ronda añade un nuevo color</p>
                 <p>🏆 ¡Consigue la puntuación más alta!</p>
                 <p className="text-green-400 font-bold">💰 50 puntos por secuencia completada</p>
               </div>
-              <Button onClick={startGame} size="lg" className={`text-2xl py-8 px-12 bg-${brandingData.color}-600 hover:bg-${brandingData.color}-700`}>
+              <Button onClick={startGame} size="lg" className={`text-3xl py-8 px-12 bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.4)]`}>
                 <Play className="w-8 h-8 mr-3" />
                 ¡Comenzar Juego!
               </Button>
@@ -205,26 +205,26 @@ export default function SimonSaysGame() {
     <GameLayout gameTitle="Simón Dice">
       <PlayerNameModal isOpen={showNameModal} onSubmit={handleSaveScore} gameTitle="Simón Dice" />
 
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-8xl mx-auto">
         <div className="text-center mb-8">
           <div className="flex justify-center items-center space-x-8 mb-6">
-            <div className="text-2xl text-white/90">
-              Puntuación: <span className="text-red-400 font-bold text-3xl">{calculateScore()}</span>
+            <div className="text-4xl text-white/90">
+              Puntuación: <span className="text-red-400 font-bold text-4xl">{calculateScore()}</span>
             </div>
-            <div className="text-2xl text-white/90">
-              Secuencia: <span className="text-blue-400 font-bold text-3xl">{sequence.length}</span>
+            <div className="text-4xl text-white/90">
+              Secuencia: <span className="text-blue-400 font-bold text-4xl">{sequence.length}</span>
             </div>
-            <div className="text-2xl text-white/90">
-              Nivel: <span className="text-green-400 font-bold text-3xl">{score}</span>
+            <div className="text-4xl text-white/90">
+              Nivel: <span className="text-green-400 font-bold text-4xl">{score}</span>
             </div>
           </div>
 
-          <div className="text-xl text-white/80">
+          <div className="text-4xl text-white/80">
             {!isPlayerTurn ? "👀 Observa la secuencia..." : "🖱️ ¡Tu turno! Repite la secuencia"}
           </div>
         </div>
 
-        <div className="relative w-[420px] h-[420px] mx-auto rounded-full shadow-[inset_0_8px_20px_rgba(255,255,255,0.3),inset_0_-8px_20px_rgba(0,0,0,0.6),0_12px_25px_rgba(0,0,0,0.8)] bg-black">
+        <div className="relative aspect-square mx-auto rounded-full shadow-[inset_0_8px_20px_rgba(255,255,255,0.3),inset_0_-8px_20px_rgba(0,0,0,0.6),0_12px_25px_rgba(0,0,0,0.8)] bg-black">
           {colors.map((color) => {
             let position = "";
             let rounded = "";
