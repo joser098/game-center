@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Home, ArrowLeft } from "lucide-react"
 import brandingData from "@/utils/conts";
 import Banner from "@/components/Banner.tsx";
+import { colorVariants } from "@/utils/game-config";
 
 interface GameLayoutProps {
   children: React.ReactNode
@@ -10,8 +11,22 @@ interface GameLayoutProps {
 }
 
 export default function GameLayout({ children, gameTitle }: GameLayoutProps) {
+  const brandColors = colorVariants[brandingData.color] || [
+  "#ff7676", // coral
+  "#fddb3a", // amarillo
+  "#1dd3b0", // verde agua
+  "#6c63ff", // violeta eléctrico
+  ];
+  
   return (
-    <div className={`flex flex-col min-h-screen bg-gradient-to-br from-${brandingData.color}-900 via-${brandingData.color}-800 to-${brandingData.color}-900`}>
+    <div 
+    className={`flex flex-col min-h-screen bg-animated bg-gradient-to-br from-${brandingData.color}-900 via-${brandingData.color}-800 to-${brandingData.color}-900`}
+    style={{
+        "--color-1": brandColors[0],
+        "--color-2": brandColors[1],
+        "--color-3": brandColors[2],
+        "--color-4": brandColors[3],
+      } as React.CSSProperties }>
       {/* Game Header */}
       <header className="border-b border-white/20 bg-black/20 backdrop-blur-sm">
         <div className="container mx-auto px-6 py-12">
