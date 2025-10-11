@@ -4,6 +4,7 @@ import { Home, ArrowLeft } from "lucide-react"
 import brandingData from "@/utils/conts";
 import Banner from "@/components/Banner.tsx";
 import { colorVariants } from "@/utils/game-config";
+import { useEffect, useState } from "react";
 
 interface GameLayoutProps {
   children: React.ReactNode
@@ -17,6 +18,33 @@ export default function GameLayout({ children, gameTitle }: GameLayoutProps) {
   "#1dd3b0", // verde agua
   "#6c63ff", // violeta eléctrico
   ];
+
+  const [showBanner, setShowBanner] = useState<boolean>(false);
+  const [showNavButtons, setShowNavButtons] = useState<boolean>(true);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("userSettings");
+    if (saved) {
+      try {
+        const settings = JSON.parse(saved);
+
+        // 🧠 Mostrar u ocultar el banner
+        if (typeof settings.showBanner === "boolean") {
+          setShowBanner(settings.showBanner);
+        }
+
+        // 🎮 Verificar cuántos juegos están activos
+        const activeGames = Object.values(settings.games || {}).filter((g: boolean) => g);
+        if (activeGames.length <= 1) {
+          setShowNavButtons(false);
+        } else {
+          setShowNavButtons(true);
+        }
+      } catch {
+        console.warn("Error leyendo configuración de usuario");
+      }
+    }
+  }, []);
   
   return (
     <div 
@@ -45,7 +73,7 @@ export default function GameLayout({ children, gameTitle }: GameLayoutProps) {
               </div>
             </div>
 
-            <div className="flex items-center space-x-4">
+            {(showNavButtons && <div className="flex items-center space-x-4">
               <a href="/">
                 <Button
                   variant="outline"
@@ -56,7 +84,7 @@ export default function GameLayout({ children, gameTitle }: GameLayoutProps) {
                   Volver a Juegos
                 </Button>
               </a>
-              <a href="/">
+              {/* <a href="/">
                 <Button
                   size="lg"
                   style={{ backgroundColor: brandingData.brandColor }}
@@ -65,8 +93,8 @@ export default function GameLayout({ children, gameTitle }: GameLayoutProps) {
                   <Home className="w-10 h-10 mr-2" />
                   Inicio
                 </Button>
-              </a>
-            </div>
+              </a> */}
+            </div>)}
           </div>
         </div>
       </header>
@@ -80,7 +108,7 @@ export default function GameLayout({ children, gameTitle }: GameLayoutProps) {
       {/* Footer */}
       <footer className="border-t border-white/20 bg-black/20 backdrop-blur-sm mt-auto">
         {/* ADS BANNER */}
-        {brandingData.showBanner && <Banner />}
+        {showBanner && <Banner />}
         <div className="container mx-auto px-6 py-12 text-center">
           <p className="text-white/80 text-3xl">
             Powered by © {" "}
