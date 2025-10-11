@@ -1,8 +1,10 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import MemoryGame from '@/components/games/Memory';
+import BackgroundSound from '@/components/BackgroundSound';
 ---
 
 <Layout>
 	<MemoryGame client:load/>
+	<BackgroundSound client:load src="/sounds/fast-game-loop.mp3" autoPlay loop />
 </Layout>

@@ -1,8 +1,10 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import TriviaGame from '@/components/games/Trivia';
+import BackgroundSound from '@/components/BackgroundSound';
 ---
 
 <Layout>
 	<TriviaGame client:load/>
+	<BackgroundSound client:load src="/sounds/game-loop1.mp3" autoPlay loop />
 </Layout>

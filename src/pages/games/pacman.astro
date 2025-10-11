@@ -1,8 +1,10 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import PacmanGame from '@/components/games/Pacman';
+import BackgroundSound from '@/components/BackgroundSound';
 ---
 
 <Layout>
 	<PacmanGame client:load/>
+	<BackgroundSound client:load src="/sounds/fast-game-loop.mp3" autoPlay loop />
 </Layout>

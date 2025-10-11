@@ -1,8 +1,10 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import World from '@/components/games/Word';
+import BackgroundSound from '@/components/BackgroundSound';
 ---
 
 <Layout>
 	<World client:load/>
+	<BackgroundSound client:load src="/sounds/game-loop1.mp3" autoPlay loop />
 </Layout>
