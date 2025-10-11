@@ -66,3 +66,11 @@ export const games = [
     duration: "20-40 min"
   }
 ]
+
+export const colorVariants: Record<string, string[]> = {
+    red: ["#ff004c", "#ff3366", "#ff6600", "#ff0000"],
+    blue: ["#007bff", "#00aaff", "#0055ff", "#66ccff"],
+    green: ["#00ff99", "#00cc66", "#00ffaa", "#00ffcc"],
+    yellow: ["#ffff00", "#ffcc00", "#ffaa00", "#fff200"],
+    purple: ["#9900ff", "#cc33ff", "#6600ff", "#9933ff"],
+  };

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Gamepad2, Users, Trophy, Zap, Crown, Brain, Gift } from "lucide-react"
 import brandingData from "@/utils/conts"
-import { games } from "@/utils/game-config"
+import { games, colorVariants } from "@/utils/game-config"
 import { useEffect, useState } from "react"
 import type { UserSettings } from "./config-modal"
 
@@ -34,8 +34,22 @@ export default function HomePage() {
   // Filtramos la lista original según los permisos
   const visibleGames = games.filter((g) => allowedGames.includes(g.id))
 
+  const brandColors = colorVariants[brandingData.color] || [
+    "#ff6b6b", // coral brillante
+    "#feca57", // amarillo cálido
+    "#48dbfb", // celeste suave
+    "#1dd1a1", // verde menta
+  ];
+
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-${brandingData.color}-900 via-${brandingData.color}-800 to-${brandingData.color}-900`}>
+    <div 
+    className={`min-h-screen bg-animated`}
+    style={{ 
+        "--color-1": brandColors[0],
+        "--color-2": brandColors[1],
+        "--color-3": brandColors[2],
+        "--color-4": brandColors[3],
+      } as React.CSSProperties}>
       {/* Header with Branding */}
       <header className="relative overflow-hidden">
         <div className="absolute inset-0 opacity-10" style={{ backgroundColor: brandingData.brandColor }} />
