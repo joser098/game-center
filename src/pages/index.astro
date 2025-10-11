@@ -1,8 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Page from '../components/Page';
+import ConfigModal from '@/components/config-modal';
 ---
 
 <Layout>
 	<Page client:load/>
+	<ConfigModal client:load/>
 </Layout>

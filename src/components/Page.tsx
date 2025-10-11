@@ -1,76 +1,39 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Gamepad2, Users, Trophy, Zap, Crown, Brain, Gift } from "lucide-react"
-import brandingData from "@/utils/conts";
-
-const games = [
-  {
-    id: "trivia",
-    name: "Trivia Challenge",
-    description: "Pon a prueba tus conocimientos",
-    icon: Trophy,
-    players: "2-8 jugadores",
-    duration: "15-30 min",
-  },
-  {
-    id: "memory",
-    name: "Desafío de Memoria",
-    description: "Encuentra las parejas y ejercita tu mente",
-    icon: Zap,
-    players: "1-4 jugadores",
-    duration: "10-20 min",
-  },
-  {
-    id: "word-game",
-    name: "Maestro de Palabras",
-    description: "Adivina palabras y compite con amigos",
-    icon: Users,
-    players: "2-6 jugadores",
-    duration: "20-40 min",
-  },
-  {
-    id: "reaction-time",
-    name: "Tiempo de Reacción",
-    description: "¡Compete con tus amigos y gana recompensas!",
-    icon: Trophy,
-    players: "2-6 jugadores",
-    duration: "15-30 min",
-  },
-  {
-    id: "simon-says",
-    name: "Simón Dice",
-    description: "Memoriza y repite la secuencia de colores que Simón te muestre",
-    icon: Brain,
-    players: "2-6 jugadores",
-    duration: "20-40 min",
-  },
-  {
-    id: "pacman",
-    name: "Pac-Man",
-    description: "El clásico juego de comecocos",
-    icon: Brain,
-    players: "2-6 jugadores",
-    duration: "20-40 min",
-  },
-  {
-    id: "tetris",
-    name: "Tetris",
-    description: "Juega contra el tiempo y gana puntos",
-    icon: Brain,
-    players: "2-6 jugadores",
-    duration: "20-40 min",
-  },
-  {
-    id: "gift-wheel",
-    name: "Rueda de Regalos",
-    description: "¡Gana premios y gana puntos!",
-    icon: Gift,
-    players: "2-6 jugadores",
-    duration: "20-40 min"
-  }
-]
+import brandingData from "@/utils/conts"
+import { games } from "@/utils/game-config"
+import { useEffect, useState } from "react"
+import type { UserSettings } from "./config-modal"
 
 export default function HomePage() {
+  const [allowedGames, setAllowedGames] = useState<string[]>([])
+
+  useEffect(() => {
+    // Obtener configuración del localStorage
+    const saved = localStorage.getItem("userSettings")
+    if (saved) {
+      try {
+        const settings: UserSettings = JSON.parse(saved)
+        // Filtramos los IDs de juegos habilitados
+        const enabled = Object.keys(settings.games).filter(
+          (id) => settings.games[id] === true
+        )
+        setAllowedGames(enabled)
+      } catch (err) {
+        console.error("Error al leer configuración:", err)
+        // Si falla, mostramos todos
+        setAllowedGames(games.map((g) => g.id))
+      }
+    } else {
+      // Si no hay configuración, mostramos todos los juegos
+      setAllowedGames(games.map((g) => g.id))
+    }
+  }, [])
+
+  // Filtramos la lista original según los permisos
+  const visibleGames = games.filter((g) => allowedGames.includes(g.id))
+
   return (
     <div className={`min-h-screen bg-gradient-to-br from-${brandingData.color}-900 via-${brandingData.color}-800 to-${brandingData.color}-900`}>
       {/* Header with Branding */}
@@ -93,9 +56,6 @@ export default function HomePage() {
             </div>
 
             <div className="space-y-4">
-              {/* <h1 className="text-6xl font-bold text-white tracking-tight drop-shadow-lg">
-                {brandingData.companyName}
-              </h1> */}
               <p className={`text-4xl font-bold text-white bg-${brandingData.color}-600 px-6 py-6 rounded-full border-2 border-white shadow-lg`}>
                 {brandingData.motive}
               </p>
@@ -122,11 +82,10 @@ export default function HomePage() {
       <main className="container mx-auto px-8 py-4">
         <div className="text-center pt-4 pb-8">
           <h2 className="text-5xl font-bold text-white drop-shadow-lg">¡Selecciona un juego y comienza la diversión!</h2>
-          {/* <p className="text-xl text-white/90">¡Selecciona un juego y comienza la diversión!</p> */}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mx-auto">
-          {games.map((game) => {
+          {visibleGames.map((game) => {
             const IconComponent = game.icon
             return (
               <Card
@@ -146,10 +105,6 @@ export default function HomePage() {
                 </CardHeader>
                 <CardContent className="text-center space-y-2">
                   <p className="text-3xl text-white/90">{game.description}</p>
-                  {/* <div className="flex justify-evenly space-y-8 text-white/80">
-                    <p className="text-3xl">👥 {game.players}</p>
-                    <p className="text-3xl">⏱️ {game.duration}</p>
-                  </div> */}
                   <a href={`/games/${game.id}`}>
                     <Button
                       size="lg"
@@ -166,15 +121,12 @@ export default function HomePage() {
           })}
         </div>
 
-        {/* PROMOCIONAL MARCA SOLO HOME */}
-        {/* <div className="text-center mt-20 pt-12 border-t border-white/20">
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 max-w-4xl mx-auto">
-            <h3 className="text-4xl font-bold text-white mb-4">🥤 Momentos Refrescantes</h3>
-            <p className="text-2xl text-white/90">
-              Disfruta de estos juegos mientras compartes momentos únicos con tu equipo
-            </p>
+        {/* Si no hay juegos habilitados */}
+        {visibleGames.length === 0 && (
+          <div className="text-center py-20 text-white text-4xl font-bold opacity-80">
+            No hay juegos habilitados 🎮
           </div>
-        </div> */}
+        )}
       </main>
     </div>
   )
