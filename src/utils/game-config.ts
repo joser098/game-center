@@ -68,9 +68,14 @@ export const games = [
 ]
 
 export const colorVariants: Record<string, string[]> = {
-    red: ["#ff004c", "#ff3366", "#ff6600", "#ff0000"],
-    blue: ["#007bff", "#00aaff", "#0055ff", "#66ccff"],
-    green: ["#00ff99", "#00cc66", "#00ffaa", "#00ffcc"],
-    yellow: ["#ffff00", "#ffcc00", "#ffaa00", "#fff200"],
-    purple: ["#9900ff", "#cc33ff", "#6600ff", "#9933ff"],
-  };
+  rojo: ["#ffb3b3", "#ff6666", "#ff3333", "#e60000", "#b30000"],
+  azul: ["#b3d9ff", "#66b3ff", "#3385ff", "#0066ff", "#0047b3"],
+  verde: ["#b3ffcc", "#66ff99", "#33cc66", "#00b359", "#008040"],
+  amarillo: ["#fff5b3", "#ffeb66", "#ffe033", "#ffd11a", "#e6b800"],
+  violeta: ["#e0b3ff", "#cc66ff", "#b333ff", "#9900ff", "#6600cc"],
+  naranja: ["#ffd1b3", "#ff9966", "#ff8533", "#ff6600", "#cc5200"],
+  rosa: ["#ffcce0", "#ff99cc", "#ff66b2", "#ff3385", "#e60073"],
+  cian: ["#b3ffff", "#66ffff", "#33e6e6", "#00cccc", "#009999"],
+  turquesa: ["#b3fff0", "#66ffe0", "#33ffcc", "#00e6b8", "#00b38f"],
+  gris: ["#f2f2f2", "#cccccc", "#999999", "#666666", "#333333"],
+};

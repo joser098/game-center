@@ -79,9 +79,9 @@
 const brandingData = {
   companyName: "YPF",
   brandColor: "#0451DD",
-  logoUrl: "/ypf-logo.webp",
+  logoUrl: "/logo.png",
   motive: "Transformamos vidas a través de la energía",
-  color: 'blue',
+  color: 'rojo',
   triviaQuestions: [
     {
       question: "¿En qué año se fundó YPF?",
@@ -138,25 +138,8 @@ const brandingData = {
     Bebidas: ["COCACOLA", "REFRESCO", "BURBUJAS", "FELICIDAD", "COMPARTIR"],
     Animales: ["ELEFANTE", "JIRAFA", "PINGUINO", "DELFIN", "MARIPOSA"],
     Tecnología: ["COMPUTADORA", "INTERNET", "SOFTWARE", "TECLADO", "MONITOR"],
-  },
-  showBanner: false,
-  gamesToShow: {
-    trivia: true,
-    memory: true,
-    "word-game": true,
-    "reaction-time": true,
-    "simon-says": true,
-    pacman: true,
-    tetris: true,
-    giftWheel: true
   }
 }
 
-const gradientMap = {
-  red: 'from-red-900 via-red-800 to-red-900',
-  blue: 'from-blue-900 via-blue-800 to-blue-900',
-  green: 'from-green-900 via-green-800 to-green-900',
-  // agregá más según necesites
-};
 
 export default brandingData;
