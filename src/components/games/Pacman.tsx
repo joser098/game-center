@@ -328,15 +328,15 @@ export default function PacmanGame() {
     if (cell === 1) {
       bgColor = "#0000ff";
     } else if (cell === 0) {
-      icon = <Dot size={10} color="#fff" />;
+      icon = <Dot size={40} color="#fff" />;
     } else if (cell === 2) {
-      icon = <Star size={14} color="#f5e050" />;
+      icon = <Star size={34} color="#f5e050" />;
     }
 
     if (isPacmanHere) {
-      icon = <CircleDot size={18} color="#ffff00" />;
+      icon = <CircleDot size={58} color="#ffff00" />;
     } else if (ghost) {
-      icon = <Ghost size={18} color={powerMode ? "#00ffff" : ghost.color} />;
+      icon = <Ghost size={58} color={powerMode ? "#00ffff" : ghost.color} />;
     }
 
     return (
@@ -530,7 +530,7 @@ export default function PacmanGame() {
                   </Button>
                   <div></div>
                 </div>
-                <Button onClick={togglePause} className="h-16 text-3xl w-full bg-yellow-600 hover:bg-yellow-700">
+                <Button onClick={togglePause} className="mt-8 h-16 text-3xl w-full bg-yellow-600 hover:bg-yellow-700">
                   <Pause className="w-12 h-12 mr-2" />
                   {isPaused ? "Reanudar" : "Pausar"}
                 </Button>

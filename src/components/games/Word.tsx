@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Trophy, Clock, Zap } from "lucide-react"
@@ -28,10 +28,33 @@ export default function WordGame() {
   const [score, setScore] = useState(0)
   const [showCategorySelector, setShowCategorySelector] = useState(true)
   const [showPlayerNameModal, setShowPlayerNameModal] = useState(false)
+  const successSoundRef = useRef<HTMLAudioElement | null>(null)
+  const failSoundRef = useRef<HTMLAudioElement | null>(null)
 
   const maxWrongGuesses = 6
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
   const wordsPerGame = 5
+
+  // Sonidos
+  useEffect(() => {
+    // Solo se ejecuta en el cliente
+    successSoundRef.current = new Audio("/sounds/success.mp3")
+    failSoundRef.current = new Audio("/sounds/fail.wav")
+  }, [])
+
+  const playFX = (success: boolean) => {
+    if (success) {
+      if (successSoundRef.current) {
+        successSoundRef.current.currentTime = 0 // Reinicia el audio
+        successSoundRef.current.play().catch(() => {})
+      }
+    } else {
+      if (failSoundRef.current) {
+        failSoundRef.current.currentTime = 0 // Reinicia el audio
+        failSoundRef.current.play().catch(() => {})
+      }
+    }
+  }
 
   const initializeGame = (category?: string) => {
     const chosenCategory = category || currentCategory
@@ -76,7 +99,11 @@ export default function WordGame() {
     const upperLetter = letter.toUpperCase()
     setGuessedLetters((prev) => [...prev, upperLetter])
     if (!currentWord.includes(upperLetter)) {
+      playFX(false)
       setWrongGuesses((prev) => prev + 1)
+    }
+    if(currentWord.includes(letter)){
+      playFX(true)
     }
   }
 

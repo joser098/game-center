@@ -249,7 +249,7 @@ export default function TetrisGame() {
   // Game loop
   useEffect(() => {
     if (isPlaying && !gameOver && !isPaused) {
-      const speed = Math.max(100, 1000 - (level - 1) * 100)
+      const speed = Math.max(100, 500 - (level - 1) * 100)
       gameLoopRef.current = setInterval(() => {
         movePiece(0, 1)
       }, speed)

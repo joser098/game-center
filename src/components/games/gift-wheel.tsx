@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import GameLayout from "@/components/game-layout"
@@ -8,14 +8,14 @@ import { saveScore, generatePlayerId } from "@/lib/leaderboard"
 import brandingData from "@/utils/conts"
 
 const prizes = [
-  { id: 1, name: "Coca-Cola 600ml", points: 100, color: "#E60012", emoji: "🥤" },
-  { id: 2, name: "Camiseta Coca-Cola", points: 300, color: "#FF6B6B", emoji: "👕" },
-  { id: 3, name: "Gorra Coca-Cola", points: 250, color: "#4ECDC4", emoji: "🧢" },
-  { id: 4, name: "Botella Térmica", points: 400, color: "#45B7D1", emoji: "🍼" },
-  { id: 5, name: "Pack 6 Coca-Colas", points: 500, color: "#96CEB4", emoji: "📦" },
-  { id: 6, name: "Auriculares Coca-Cola", points: 600, color: "#FFEAA7", emoji: "🎧" },
-  { id: 7, name: "Mochila Coca-Cola", points: 700, color: "#DDA0DD", emoji: "🎒" },
-  { id: 8, name: "¡PREMIO ESPECIAL!", points: 1000, color: "#FFD700", emoji: "🏆" },
+  { id: 1, points: 100, color: brandingData.brandColor, emoji: "SIGUE INTENTANDO" },
+  { id: 2, points: 300, color: brandingData.brandColor, emoji: "/premio1.png" },
+  { id: 3, points: 250, color: brandingData.brandColor, emoji: "SIGUE INTENTANDO" },
+  { id: 4, points: 400, color: brandingData.brandColor, emoji: "/premio2.png" },
+  { id: 5, points: 500, color: brandingData.brandColor, emoji: "SIGUE INTENTANDO" },
+  { id: 6, points: 600, color: brandingData.brandColor, emoji: "/premio3.png" },
+  { id: 7, points: 700, color: brandingData.brandColor, emoji: "SIGUE INTENTANDO" },
+  { id: 8, points: 1000, color: brandingData.brandColor, emoji: "/premio4.png" },
 ]
 
 export default function GiftWheelGame() {
@@ -29,10 +29,22 @@ export default function GiftWheelGame() {
   // const [showNameModal, setShowNameModal] = useState(false)
   const [wonPrizes, setWonPrizes] = useState<typeof prizes>([])
   const wheelRef = useRef<HTMLDivElement>(null)
+  const clickSoundRef = useRef<HTMLAudioElement | null>(null)
 
+  
   // // Sonidos
-  // const clickSound = useRef(new Audio("/sounds/click.mp3"))
+  useEffect(() => {
+    // Solo se ejecuta en el cliente
+    clickSoundRef.current = new Audio("/sounds/click.mp3")
+  }, [])
   // const winSound = useRef(new Audio("/sounds/win.mp3"))
+
+  const playClickSound = () => {
+    if (clickSoundRef.current) {
+      clickSoundRef.current.currentTime = 0 // Reinicia el audio
+      clickSoundRef.current.play().catch(() => {})
+    }
+  }
 
   const spinWheel = () => {
     if (isSpinning) return
@@ -60,8 +72,8 @@ export default function GiftWheelGame() {
     // Animación y sonidos
     let tickCount = 0
     const ticks = prizes.length * 4 // Número de “clics” antes de parar
+    playClickSound()
     const tickInterval = setInterval(() => {
-      // clickSound.current.play()
       tickCount++
       if (tickCount >= ticks) clearInterval(tickInterval)
     }, 100)
@@ -80,7 +92,7 @@ export default function GiftWheelGame() {
         return newSpins
       })
       setIsSpinning(false)
-    }, 3000)
+    }, 8000)
   }
 
   const resetGame = () => {
@@ -107,7 +119,7 @@ export default function GiftWheelGame() {
   // }
 
   const renderWheel = () => {
-    const radius = 700
+    const radius = 750
     const centerX = radius
     const centerY = radius
     const prizeAngle = 360 / prizes.length
@@ -118,7 +130,7 @@ export default function GiftWheelGame() {
           className={`transition-transform duration-3000 ease-out rounded-full shadow-2xl`}
           style={{
             transform: `rotate(${currentRotation}deg)`,
-            transitionDuration: isSpinning ? "3s" : "0s",
+            transitionDuration: isSpinning ? "8s" : "0s",
           }}
         >
           <svg width={radius * 2} height={radius * 2}>
@@ -135,12 +147,12 @@ export default function GiftWheelGame() {
 
               const pathData = `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius * 0.9} ${radius * 0.9} 0 0 1 ${x2} ${y2} Z`
               const textAngle = startAngle + prizeAngle / 2
-              const textRadius = radius * 0.7
+              const textRadius = radius * 0.55
               const textX = centerX + textRadius * Math.cos((textAngle * Math.PI) / 180)
               const textY = centerY + textRadius * Math.sin((textAngle * Math.PI) / 180)
 
               return (
-                <g key={prize.id} className="cursor-pointer hover:scale-105 transition-transform duration-300">
+                <g key={prize.id} className="cursor-pointer transition-transform duration-300">
                   <defs>
                     <linearGradient id={`grad-${prize.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor={prize.color} stopOpacity={0.9} />
@@ -148,18 +160,29 @@ export default function GiftWheelGame() {
                     </linearGradient>
                   </defs>
                   <path d={pathData} fill={`url(#grad-${prize.id})`} stroke="#fff" strokeWidth="3" />
-                  <text
-                    x={textX}
-                    y={textY}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fill="white"
-                    fontSize="24"
-                    fontWeight="bold"
-                    transform={`rotate(${textAngle}, ${textX}, ${textY})`}
-                  >
-                    {prize.emoji}
-                  </text>
+                  {prize.emoji === "SIGUE INTENTANDO" ? (
+                    <text
+                      x={textX}
+                      y={textY}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      fill="white"
+                      fontSize="45"
+                      fontWeight="bold"
+                      transform={`rotate(${textAngle}, ${textX}, ${textY})`}
+                    >
+                      {prize.emoji}
+                    </text>
+                  ) : (
+                    <image
+                      href={prize.emoji}
+                      x={textX-100}
+                      y={textY-100}
+                      width="400"
+                      height="250"
+                      transform={`rotate(${textAngle}, ${textX}, ${textY})`}
+                    />
+                  )}
                 </g>
               )
             })}
@@ -189,7 +212,7 @@ export default function GiftWheelGame() {
         <Card className="bg-white/10 backdrop-blur-sm border-white/20">
           <CardContent className="p-8">
             <div className="flex flex-col items-center space-y-8">
-              <h2 className="text-6xl font-bold text-white mb-2">🎡 Ruleta de Regalos Coca-Cola</h2>
+              <h2 className="text-6xl font-bold text-white mb-2">Ruleta de Regalos</h2>
               <p className="text-4xl text-white/80 mb-4">¡Gira la ruleta y gana increíbles premios!</p>
               {renderWheel()}
               <Button
@@ -208,13 +231,6 @@ export default function GiftWheelGame() {
                   </>
                 )}
               </Button>
-              {selectedPrize && !isSpinning && (
-                <div className="mt-6 p-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg shadow-2xl animate-pulse text-center">
-                  <div className="text-4xl mb-2">{selectedPrize.emoji}</div>
-                  <div className="text-2xl font-bold text-white">{selectedPrize.name}</div>
-                  <div className="text-xl text-green-400">+{selectedPrize.points} puntos</div>
-                </div>
-              )}
             </div>
           </CardContent>
         </Card>

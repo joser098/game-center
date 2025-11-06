@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
@@ -10,6 +10,7 @@ import { CheckCircle, XCircle, Trophy } from "lucide-react"
 import { saveScore, generatePlayerId } from "@/lib/leaderboard"
 import BData from "@/utils/conts"
 import brandingData from "@/utils/conts"
+import defaults from "@/utils/defaults"
 
 export default function TriviaGame() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -18,17 +19,45 @@ export default function TriviaGame() {
   const [showResult, setShowResult] = useState(false)
   const [gameFinished, setGameFinished] = useState(false)
   const [showNameModal, setShowNameModal] = useState(false)
+  const [triviaQuestions, setTriviaQuestions] = useState(BData.triviaQuestions || defaults.triviaQuestions);
+  const successSoundRef = useRef<HTMLAudioElement | null>(null)
+  const failSoundRef = useRef<HTMLAudioElement | null>(null)
+  
+  // // Sonidos
+  useEffect(() => {
+    // Solo se ejecuta en el cliente
+    successSoundRef.current = new Audio("/sounds/success.mp3")
+    failSoundRef.current = new Audio("/sounds/fail.wav")
+  }, [])
+
+  const playFX = (success: boolean) => {
+    if (success) {
+      if (successSoundRef.current) {
+        successSoundRef.current.currentTime = 0 // Reinicia el audio
+        successSoundRef.current.play().catch(() => {})
+      }
+    } else {
+      if (failSoundRef.current) {
+        failSoundRef.current.currentTime = 0 // Reinicia el audio
+        failSoundRef.current.play().catch(() => {})
+      }
+    }
+  }
 
   const handleAnswerSelect = (answerIndex: number) => {
     setSelectedAnswer(answerIndex)
     setShowResult(true)
 
-    if (answerIndex === BData.triviaQuestions[currentQuestion].correct) {
+    if (answerIndex === triviaQuestions[currentQuestion].correct) {
+      // PLAY DX SOUND
+      playFX(true)
       setScore(score + 1)
     }
 
+    // PLAY FX SOUND
+    playFX(false)
     setTimeout(() => {
-      if (currentQuestion < BData.triviaQuestions.length - 1) {
+      if (currentQuestion < triviaQuestions.length - 1) {
         setCurrentQuestion(currentQuestion + 1)
         setSelectedAnswer(null)
         setShowResult(false)
@@ -46,7 +75,7 @@ export default function TriviaGame() {
       playerName,
       game: "trivia",
       score: finalScore,
-      details: `${score}/${BData.triviaQuestions.length} correctas`,
+      details: `${score}/${triviaQuestions.length} correctas`,
       timestamp: Date.now(),
     })
     setShowNameModal(false)
@@ -74,13 +103,13 @@ export default function TriviaGame() {
             </CardHeader>
             <CardContent className="space-y-8">
               <div className="text-8xl font-bold text-red-400">
-                {score}/{BData.triviaQuestions.length}
+                {score}/{triviaQuestions.length}
               </div>
               <div className={`text-6xl font-bold text-${brandingData.color}-400`}>{score * 100} puntos</div>
               <p className="text-6xl text-white/90">
-                {score === BData.triviaQuestions.length
+                {score === triviaQuestions.length
                   ? "¡Puntuación Perfecta! 🎉"
-                  : score >= BData.triviaQuestions.length / 2
+                  : score >= triviaQuestions.length / 2
                     ? "¡Excelente Trabajo! 👏"
                     : "¡Sigue Practicando! 💪"}
               </p>
@@ -103,22 +132,22 @@ export default function TriviaGame() {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-8 py-12">
             <span className="text-6xl font-bold text-white/90">
-              Pregunta {currentQuestion + 1} de {BData.triviaQuestions.length}
+              Pregunta {currentQuestion + 1} de {triviaQuestions.length}
             </span>
             <span className={`text-6xl font-bold text-${brandingData.color}-400 font-bold}`}>Puntuación: {score * 100}</span>
           </div>
-          <Progress value={(currentQuestion / BData.triviaQuestions.length) * 100} className="h-10" />
+          <Progress value={(currentQuestion / triviaQuestions.length) * 100} className="h-10" />
         </div>
 
         <Card className="bg-white/10 backdrop-blur-sm border-white/20 py-12">
           <CardHeader>
             <CardTitle className="text-6xl text-white text-center py-12">
-              {BData.triviaQuestions[currentQuestion].question}
+              {triviaQuestions[currentQuestion].question}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 gap-8">
-              {BData.triviaQuestions[currentQuestion].options.map((option, index) => (
+              {triviaQuestions[currentQuestion].options.map((option, index) => (
                 <Button
                   key={index}
                   onClick={() => handleAnswerSelect(index)}
@@ -126,7 +155,7 @@ export default function TriviaGame() {
                   variant="outline"
                   className={`p-12 text-6xl h-auto text-left justify-start font-bold ${
                     showResult
-                      ? index === BData.triviaQuestions[currentQuestion].correct
+                      ? index === triviaQuestions[currentQuestion].correct
                         ? "bg-green-600 border-green-500 text-white"
                         : index === selectedAnswer
                           ? "bg-red-600 border-red-500 text-white"
@@ -135,10 +164,10 @@ export default function TriviaGame() {
                   }`}
                 >
                   <div className="flex items-center space-x-3">
-                    {showResult && index === BData.triviaQuestions[currentQuestion].correct && (
+                    {showResult && index === triviaQuestions[currentQuestion].correct && (
                       <CheckCircle className="w-10 h-10 text-green-400" />
                     )}
-                    {showResult && index === selectedAnswer && index !== BData.triviaQuestions[currentQuestion].correct && (
+                    {showResult && index === selectedAnswer && index !== triviaQuestions[currentQuestion].correct && (
                       <XCircle className="w-10 h-10 text-red-400" />
                     )}
                     <span>{option}</span>
