@@ -1,6 +1,6 @@
 import type React from "react"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Crown } from "lucide-react"
 import brandingData from "@/utils/conts"
 import Banner from "@/components/Banner"
 import { colorVariants } from "@/utils/game-config"
@@ -60,6 +60,17 @@ export default function GameLayout({ children, gameTitle }: GameLayoutProps) {
                   {brandingData.companyName}
                 </p>
               </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <a href="/leaderboard">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="text-white text-4xl border-white/30 bg-white/10 backdrop-blur-sm hover:bg-white/20"
+                >
+                  <Crown className="w-6 h-6" />
+                </Button>
+              </a>
             </div>
 
             {showNavButtons && (
