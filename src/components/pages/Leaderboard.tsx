@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import GameLayout from "@/components/game-layout"
 import { Trophy, Medal, Award, Crown, Home, RotateCcw, Gamepad2, Clock, Target } from "lucide-react"
+import { useStore } from "@nanostores/react"
+import { userSettings } from "@/stores/userSettingsStore"
 import {
   getTopPlayers,
   getGameLeaderboard,
@@ -20,6 +22,8 @@ const gameIcons: { [key: string]: any } = {
   "word-game": Target,
   "simon-says": Target,
   "reaction-time": Clock,
+  "pacman": Target,
+  "tetris": Target,
 }
 
 const gameNames: { [key: string]: string } = {
@@ -28,12 +32,24 @@ const gameNames: { [key: string]: string } = {
   "word-game": "Maestro de Palabras",
   "simon-says": "Simón Dice",
   "reaction-time": "Tiempo de Reacción",
+  "pacman": "Pac-Man",
+  "tetris": "Tetris",
 }
 
 export default function LeaderboardPage() {
   const [topPlayers, setTopPlayers] = useState<LeaderboardEntry[]>([])
   const [selectedGame, setSelectedGame] = useState<string>("all")
   const [gameScores, setGameScores] = useState<PlayerScore[]>([])
+  const settings = useStore(userSettings)
+
+  const allowedGames =
+  settings && settings.games
+    ? Object.keys(settings.games).filter((id) => settings.games[id])
+    : Object.keys(gameIcons)
+
+  const visibleGameIds = Object.keys(gameIcons).filter((id) =>
+    allowedGames.includes(id)
+  )
 
   useEffect(() => {
     setTopPlayers(getTopPlayers(20))
@@ -98,8 +114,10 @@ export default function LeaderboardPage() {
                 <Trophy className="w-4 h-4 mr-2" />
                 Todos los Juegos
               </Button>
-              {Object.entries(gameNames).map(([gameId, gameName]) => {
+              {visibleGameIds.map((gameId) => {
+                const gameName = gameNames[gameId]
                 const IconComponent = gameIcons[gameId] || Gamepad2
+
                 return (
                   <Button
                     key={gameId}
@@ -111,7 +129,7 @@ export default function LeaderboardPage() {
                         : "text-white border-white/30 bg-white/10 hover:bg-white/20 text-3xl h-12"
                     }
                   >
-                    <IconComponent className="w-4 h-4 mr-2" />
+                    <IconComponent style={{ width: 16, height: 16 }} className="mr-2" />
                     {gameName}
                   </Button>
                 )
@@ -183,12 +201,6 @@ export default function LeaderboardPage() {
                   <div className="text-center py-12">
                     <Trophy className="w-16 h-16 text-white/30 mx-auto mb-4" />
                     <p className="text-4xl text-white/70">¡Aún no hay puntuaciones para este juego!</p>
-                    <a href={`/games/${selectedGame}`}>
-                      <Button className="mt-4 h-12 text-3xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.4)]">
-                        <Gamepad2 className="w-4 h-4 mr-2" />
-                        Jugar Ahora
-                      </Button>
-                    </a>
                   </div>
                 ) : (
                   <div className="space-y-3 max-h-96 overflow-y-auto">
@@ -223,6 +235,14 @@ export default function LeaderboardPage() {
                     ))}
                   </div>
                 )}
+                <div className="flex justify-center items-center">
+                  <a href={`/games/${selectedGame}`}>
+                    <Button className="mt-4 h-20 text-3xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.4)]">
+                      <Gamepad2 className="w-4 h-4 mr-2" />
+                      Jugar Ahora
+                    </Button>
+                  </a>
+                </div>
               </CardContent>
             </Card>
           )}
