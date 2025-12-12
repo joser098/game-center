@@ -85,6 +85,23 @@ export default function TetrisGame() {
   const [showNameModal, setShowNameModal] = useState(false)
   const gameLoopRef = useRef<NodeJS.Timeout | null>(null)
 
+  const [timeRemaining, setTimeRemaining] = useState(180) // 3 minutos
+  const [gameStartTime, setGameStartTime] = useState<number | null>(null)
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, "0")}`
+  }
+
+  const getTimerColor = () => {
+    if (timeRemaining > 120) return "text-green-400"
+    if (timeRemaining > 60) return "text-yellow-400"
+    return "text-red-400"
+  }
+
+
+
   const createRandomPiece = useCallback((): Piece => {
     const types = Object.keys(TETROMINOS) as TetrominoType[]
     const type = types[Math.floor(Math.random() * types.length)]
@@ -218,6 +235,8 @@ export default function TetrisGame() {
     setIsPaused(false)
     setIsPlaying(true)
     setShowNameModal(false)
+    setTimeRemaining(180)
+    setGameStartTime(Date.now())
   }
 
   const resetGame = () => {
@@ -263,6 +282,24 @@ export default function TetrisGame() {
       }
     }
   }, [isPlaying, gameOver, isPaused, level, movePiece])
+
+  useEffect(() => {
+    if (!isPlaying || gameOver || isPaused || !gameStartTime) return
+
+    const interval = setInterval(() => {
+      setTimeRemaining((prev) => {
+        if (prev <= 1) {
+          setGameOver(true)
+          setShowNameModal(true)
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [isPlaying, gameOver, isPaused, gameStartTime])
+
 
   // Level up
   useEffect(() => {
@@ -452,10 +489,15 @@ export default function TetrisGame() {
 
       <div className="max-w-8xl mx-auto">
         <div className="grid grid-cols-1  gap-8">
+          {/* TIMER */}
+          <div className={`text-8xl font-bold text-center ${getTimerColor()}`}>
+            ⏰ {formatTime(timeRemaining)}
+          </div>
           {/* Game Board */}
           <div className="lg:col-span-2">
             <Card className="bg-white/10 backdrop-blur-sm border-white/20">
               <CardContent className="p-6">
+
                 <div className="flex justify-center w-full max-w-[1400px] aspect-square">
                   <div className="bg-black p-4 rounded-lg border-2 border-gray-600">{renderBoard()}</div>
                 </div>
